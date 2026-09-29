@@ -17,19 +17,20 @@ Traditional SOC auditing fails because entities can manipulate surface metrics:
 1. **Execution Gaps:** SOC analysts artificially "game" Service Level Agreements (SLAs) by summarily closing high-severity intrusion alerts in under 60 seconds with duplicate, copy-pasted boilerplate remarks (*"verified benign false positive"*), bypassing mandatory L2 and CISO escalations.
 2. **Negative Space:** Audits historically focus only on alerts that exist. The most catastrophic critical infrastructure breaches occur where systems are completely silent—such as Tier-1 Core Banking DBs or SCADA RTUs that generate **zero telemetry over 90 days** due to misconfigured log shippers, disabled sensors, or adversary suppression (*"the dog that didn't bark"*).
 
-SAT-SA provides automated dual detection, mathematical resilience scoring (ECRI), and explainable local AI reasoning to identify operational negligence and generate statutory inspection warrants.
+SAT-SA provides automated dual detection, mathematical resilience scoring (ECRI), multi-view visual analytics (Radar, Donut, Peer Benchmark, Timeline, Histogram), explainable local AI reasoning, an immutable regulatory audit ledger, and formal statutory inspection warrants.
 
 ---
 
 ## 2. System Architecture & Dual-Detection Pipeline
 
-SAT-SA operates on an air-gapped, four-tier architecture designed to process hundreds of thousands of alert records locally without external internet connectivity or cloud dependencies:
+SAT-SA operates on an air-gapped, five-tier architecture designed to process hundreds of thousands of alert records locally without external internet connectivity or cloud dependencies:
 
 ```mermaid
 flowchart TD
     subgraph Tier1["1. Air-Gapped Ingestion & Cryptographic Custody"]
         A["Batch Telemetry Dumps (CSV / JSON)"] --> B["SHA-256 Custody Hash Engine"]
         B --> C["Columnar Schema Normalizer"]
+        B -.-> AL["Statutory Audit Ledger"]
     end
 
     subgraph Tier2["2. Dual-Detection Mathematical Engines"]
@@ -45,13 +46,25 @@ flowchart TD
         E --> E3["MITRE ATT&CK Kill-Chain Coverage Void"]
     end
 
-    subgraph Tier3["3. Mathematical Scoring (ECRI)"]
+    subgraph Tier3["3. Mathematical Scoring (ECRI) & Multi-View Graphs"]
         D1 & D2 & D3 & E1 & E2 & E3 --> F["Entity Cyber Resilience Index (ECRI: 0-100)"]
+        F --> V1["6-Axis Spider / Radar Graph"]
+        F --> V2["Disposition & SLA Donut Chart"]
+        F --> V3["Hourly Gaming Spike Timeline"]
+        F --> V4["National Peer Cohort Benchmark"]
     end
 
     subgraph Tier4["4. Explainable AI & Regulatory Enforcement"]
         F --> G["Local Ollama Examiner (qwen2.5:3b)"]
         G --> H["Section 70A Inspection Dossier & CISO Inquiries"]
+        G -.-> AL
+        H -.-> AL
+    end
+
+    subgraph Tier5["5. Supervisory Access Control & Cryptographic Purge"]
+        I["Admin Authorization Modal"] --> J["Email, Password & 6-Digit PIN Validation"]
+        J --> K["Cryptographic In-Memory State Purge"]
+        K -.-> AL
     end
 ```
 
@@ -69,28 +82,49 @@ When $P(k=0) < 10^{-6}$, the silence is classified as a critical logging blindsp
 
 #### 3. Entity Cyber Resilience Index (ECRI)
 A composite $0-100$ score balancing execution rigour against telemetry completeness:
-$$\text{ECRI} = 100 - \left( w_1 \cdot \text{Gap}_{velocity} + w_2 \cdot \text{Clone}_{template} + w_3 \cdot \text{Bypass}_{escalate} + w_4 \cdot \text{Void}_{negative} \right)$$
+$$\text{ECRI} = \max\left(0, 100 - \left[ w_1 \cdot \text{Gap}_{velocity} + w_2 \cdot \text{Clone}_{template} + w_3 \cdot \text{Bypass}_{escalate} + w_4 \cdot \text{Void}_{negative} \right]\right)$$
 
 ---
 
-## 3. Repository Contents
+## 3. Repository Contents & Modular Architecture
+
+SAT-SA follows a clean, modular Single-Page Application (SPA) architecture:
 
 ```
 SAT-SA/
-├── index.html                   # High-performance single-page supervisory console
-├── server.py                    # Local air-gapped server & Ollama reverse proxy
-├── generate_rich_datasets.py    # Multi-sector production benchmark telemetry generator
-├── problem statement.md         # Official NCIIPC PS #26157 specifications
-├── IMPLEMENTATION_PLAN.md       # Full engineering specifications and formulas
-├── PRESENTATION_SLIDES.md       # Formal 4-slide regulatory presentation deck
-├── .gitignore                   # Production repository exclusions
+│
+├── index.html                  # Semantic SPA console entry point (~1,150 lines)
+├── server.py                   # Local air-gapped web server & Ollama reverse proxy
+├── generate_rich_datasets.py   # Multi-sector production benchmark telemetry generator
+├── problem statement.md        # Official NCIIPC PS #26157 specifications
+├── IMPLEMENTATION_PLAN.md      # Engineering specifications, formulas & milestones
+├── ARCHITECTURE.md             # Comprehensive platform architecture deep-dive
+├── PRESENTATION_SLIDES.md      # Formal 4-slide regulatory presentation deck
+│
+├── css/
+│   └── style.css               # Complete GovTech design system, tokens & layouts (20.3 KB)
+│
+├── js/
+│   ├── data_presets.js         # Benchmark datasets (PowerGrid, SBI, DMRC, DRDO) (7.7 KB)
+│   ├── charts.js               # Dynamic SVG coordinate plotting (Radar, Donut, Peer, Timeline) (9.8 KB)
+│   ├── audit_logger.js         # Section 70A audit ledger, live filtering & CSV/JSON export (7.7 KB)
+│   └── app.js                  # Main controller: SPA routing, pipeline modal, dropzone parser,
+│                               # admin reset authentication, and local Ollama inference (42.1 KB)
+│
+├── assets/
+│   ├── emblem_india.svg        # Crisp pure-white State Emblem of India
+│   ├── header_monument_perfect.png # Subtle Rashtrapati Bhavan top toolbar watermark
+│   └── sidebar_monument.png    # Edge-to-edge seamless navy base watermark
+│
 └── data/
-    ├── large_datasets/          # Multi-hundred row sector validation batches
-    │   ├── sbi_banking_large_dataset.csv       # 140 Banking alerts (Silent Core DBs)
-    │   ├── powergrid_scada_large_dataset.csv   # 150 SCADA alerts (83% SLA speed gaming)
-    │   ├── delhi_metro_transit_dataset.json    # 120 Transit tickets (MITRE void)
-    │   └── drdo_strategic_defence_dataset.json # 100 Defence alerts (Forensic benchmark)
-    └── sample_cses/             # Baseline entity alert logs and asset inventories
+    ├── sample_cses/            # Realistic banking alerts (54 alerts) & asset inventories (26 nodes)
+    │   ├── sbi_bank_alerts.csv
+    │   └── sbi_bank_assets.csv
+    └── large_datasets/         # Multi-hundred row multi-sector evaluation batches
+        ├── sbi_banking_large_dataset.csv       # 140 Banking alerts (Silent Core DBs)
+        ├── powergrid_scada_large_dataset.csv   # 150 SCADA alerts (83% SLA speed gaming)
+        ├── delhi_metro_transit_dataset.json    # 120 Transit tickets (MITRE void)
+        └── drdo_strategic_defence_dataset.json # 100 Defence alerts (Forensic benchmark)
 ```
 
 ---
@@ -157,35 +191,54 @@ python server.py
 
 Open your web browser and navigate to:
 ```
-http://localhost:8080
+http://localhost:8080/index.html
 ```
 
 ---
 
 ## 5. Operational Workflow & Execution Guide
 
-### Phase 1: Batch Telemetry Ingestion
-1. Navigate to **01. Ingestion Console**.
-2. Select the target Critical Sector Entity (e.g., *State Bank of India*, *National Power Grid*, *Delhi Metro*, or *DRDO*).
-3. Select the submission category under Section 2 of the problem statement.
-4. Drag & drop any CSV or JSON telemetry batch from `data/large_datasets/` (or click one of the pre-loaded benchmark buttons).
-5. The console automatically calculates and verifies the SHA-256 cryptographic custody hash.
+### Screen 01: Ingestion & Upload Console
+1. Select the target Critical Sector Entity (e.g., *State Bank of India*, *National Power Grid*, *Delhi Metro Rail*, or *DRDO*).
+2. Drag & drop any CSV or JSON telemetry batch from `data/sample_cses/` or `data/large_datasets/` (or click one of the pre-loaded benchmark buttons).
+3. The zero-layout-shift centered modal runs the 4-stage pipeline countdown (*Schema Normalizer* $\to$ *Velocity Engine* $\to$ *Silence Hunter* $\to$ *Ollama Reasoner*).
 
-### Phase 2: Dual Detection Assessment
-Once ingested, SAT-SA executes the columnar parsing pipeline:
-* **02. Executive Dashboard:** Evaluates the Entity Cyber Resilience Index (ECRI), triage velocity distributions, and domain-specific Operational Assurance Deficit breakdowns.
-* **03. Execution Gaps Engine:** Surfaces alerts closed under 60 seconds, identical semantic template notes, and bypassed senior escalation workflows.
-* **04. Negative Space Hunter:** Correlates alert streams against registered asset inventories to isolate silent Tier-1 infrastructure and MITRE ATT&CK coverage voids.
+### Screen 02: Executive Dashboard (Multi-Graph Visual System)
+Displays the Entity Cyber Resilience Index (ECRI) and features an interactive dual-panel multi-view layout (**exactly two graphs visible by default** with zero congestion):
+* **Left Card:**
+  * **Histogram (Default):** Discrete resolution time breakdown (`< 60s`, `1–15m`, `15–45m`, `> 45m`).
+  * **NCIIPC 6-Axis Spider / Radar Graph:** Dynamic polygon mapping Triage Rigour, Note Entropy, Escalation Adherence, Negative Space Coverage, MITRE ATT&CK Breadth, and Forensic Depth against the National Peer Cohort baseline.
+  * **Hourly Spikes Timeline:** 24-hour temporal distribution highlighting end-of-shift ticket flushing spikes.
+* **Right Card:**
+  * **Assurance Gauges (Default):** Progress meters measuring velocity rigour, note uniqueness, escalation adherence, and telemetry coverage.
+  * **Disposition & SLA Donut Chart:** Categorizes alert closures into SLA Gaming (`<60s`), Routine Operations, Benign Noise, and Deep Forensics with central ECRI readout.
+  * **National Peer Cohort Benchmark:** Direct comparative bar charts displaying entity performance against anonymized national sector baselines.
 
-### Phase 3: Local Explainable AI (XAI) Supervisory Reasoner
-* Navigate to **05. Ollama AI Examiner**.
-* Select the operational case evidence to review.
-* Click **▶ Run Local Ollama Inference (qwen2.5:3b)**.
-* The local model synthesizes a formal regulatory finding citing Section 70A violations and produces pointed, statutory interview questions for the entity CISO.
+### Screen 03: Execution Gaps Engine
+Surfaces alerts closed under 60 seconds, identical semantic template notes, and bypassed senior escalation workflows with one-click **"Reason in AI"** navigation.
 
-### Phase 4: Regulatory Inspection Dossier
-* Click **Generate Audit Dossier** on the dashboard.
-* An official NCIIPC Supervisory Audit Dossier and On-Site Inspection Warrant is formatted with all computed mathematical evidence, ready for regulatory issuance.
+### Screen 04: Negative Space Hunter
+Correlates alert streams against registered asset inventories to isolate silent Tier-1 infrastructure (e.g., *3 silent Core Banking Oracle RAC DBs and SWIFT Gateways over 90 days with $P < 10^{-7}$*) and MITRE ATT&CK kill-chain voids.
+
+### Screen 05: Ollama AI Examiner (Explainable XAI)
+Executes 100% offline local inference via Ollama (`qwen2.5:3b`) to synthesize formal supervisory findings and pointed CISO interview inquiries citing Section 70A violations.
+
+### Screen 06: Official Regulatory Dossier
+Formats an official NCIIPC Supervisory Audit Dossier and On-Site Inspection Warrant with computed mathematical evidence, ready for regulatory issuance or PDF export (`Print / Save as PDF`).
+
+### Screen 07: Regulatory Audit Logs & Tool Execution Ledger
+Section 70A statutory compliance ledger:
+* Immutable chronological tracking of all events (ingestion, analytical engine runs, AI inferences, dossier exports, and state purges) with timestamp, tool name, operator, outcome, and SHA-256 hash snippets.
+* Real-time text search and category filtering.
+* **`Export CSV`** and **`Export JSON`** buttons for downloading compliance logs.
+
+### Secured Admin State Reset & Cryptographic Purge
+* Located in the sidebar footer as **`"Reset State"`**.
+* Launches the **Secured State Reset & Data Purge Authorization Modal**:
+  * Requires Supervisory Admin Email (`auditor.admin@nciipc.gov.in`), Master Admin Password, 6-digit Security PIN (`700142`), and Regulatory Purge Reason.
+  * Cryptographically zeroes all in-memory evaluation records and cached AI inferences.
+  * Automatically records an immutable signed `ADMIN RESET PURGE` record into the Audit Log.
+  * Relocks screens and returns the console to `01. Ingestion & Upload`.
 
 ---
 
@@ -194,6 +247,7 @@ Once ingested, SAT-SA executes the columnar parsing pipeline:
 * **Zero Cloud Dependency:** Operates without external CDNs, external web fonts, or remote APIs.
 * **Cryptographic Custody:** Every submitted file is timestamped and hashed with SHA-256 before memory ingestion to ensure non-repudiation in regulatory proceedings.
 * **Section 2 Alignment:** Strictly enforces metadata-only ingestion (Alert ID, Asset ID, Triage Duration, Analyst Closure Remark, Escalation Tier), completely avoiding raw payload or network PCAP data.
+* **Immutable Audit Trail:** All supervisory actions and state sanitizations are logged with cryptographic verification hashes.
 
 ---
 
