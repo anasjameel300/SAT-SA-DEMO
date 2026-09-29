@@ -703,6 +703,58 @@
       color: var(--primary-navy);
     }
 
+    /* Graph View Switcher Tabs */
+    .graph-tab-group {
+      display: inline-flex;
+      background: #f1f5f9;
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 2px;
+      gap: 2px;
+    }
+
+    .graph-tab-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .graph-tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .graph-tab-btn.active {
+      background: #ffffff;
+      color: var(--primary-navy);
+      font-weight: 700;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    .graph-view-pane {
+      display: none;
+      animation: fadeInGraph 0.18s ease-in-out;
+      min-height: 180px;
+    }
+
+    .graph-view-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeInGraph {
+      from { opacity: 0; transform: translateY(2px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Form Controls */
     .form-control {
       width: 100%;
@@ -1157,112 +1209,314 @@
         </div>
       </div>
 
-      <!-- Visual Keys Row -->
+      <!-- Visual Keys Row (Interactive Multi-Graph Switcher) -->
       <div class="grid-2col" style="margin-bottom: 22px;">
-        <!-- Visual Key 1: Triage Velocity Distribution -->
+        <!-- Visual Key 1: Triage Velocity & Assessment Radar -->
         <div class="panel">
-          <div class="panel-head">
+          <div class="panel-head" style="align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
               <div>
-                <h4 style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Visual Key: Triage Velocity Distribution (SLA Speed Gaming)</h4>
-                <p style="font-size: 0.72rem; color: var(--text-muted);">Tall red bar indicates unnatural &lt;60s closures</p>
+                <h4 style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;" class="editorial-heading" id="leftGraphTitle">Visual Key: Triage Velocity Distribution (SLA Speed Gaming)</h4>
+                <p style="font-size: 0.72rem; color: var(--text-muted);" id="leftGraphSub">Tall red bar indicates unnatural &lt;60s closures</p>
               </div>
+            </div>
+            <!-- Graph Toggle Switcher -->
+            <div class="graph-tab-group">
+              <button class="graph-tab-btn active" id="tabLeftHist" onclick="switchLeftGraph('hist')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="4" width="4" height="17"/><rect x="17" y="8" width="4" height="13"/></svg>
+                Histogram
+              </button>
+              <button class="graph-tab-btn" id="tabLeftRadar" onclick="switchLeftGraph('radar')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                Spider / Radar
+              </button>
+              <button class="graph-tab-btn" id="tabLeftTimeline" onclick="switchLeftGraph('timeline')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                Hourly Spikes
+              </button>
             </div>
           </div>
 
-          <!-- Clean Precision SVG Histogram -->
-          <svg width="100%" height="160" viewBox="0 0 500 160" style="overflow: visible;">
-            <!-- Grid Lines -->
-            <line x1="40" y1="20" x2="480" y2="20" stroke="#f1f5f9" stroke-width="1" />
-            <line x1="40" y1="50" x2="480" y2="50" stroke="#f1f5f9" stroke-width="1" />
-            <line x1="40" y1="80" x2="480" y2="80" stroke="#f1f5f9" stroke-width="1" />
-            <line x1="40" y1="120" x2="480" y2="120" stroke="#cbd5e1" stroke-width="1.5" />
-            
-            <!-- Y-Axis Labels -->
-            <text x="32" y="24" fill="#94a3b8" font-size="9" text-anchor="end">20</text>
-            <text x="32" y="54" fill="#94a3b8" font-size="9" text-anchor="end">15</text>
-            <text x="32" y="84" fill="#94a3b8" font-size="9" text-anchor="end">10</text>
-            <text x="32" y="114" fill="#94a3b8" font-size="9" text-anchor="end">5</text>
-            <text x="32" y="124" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
+          <!-- View 1: Clean Precision SVG Histogram (Default) -->
+          <div id="leftPaneHist" class="graph-view-pane active">
+            <svg width="100%" height="165" viewBox="0 0 500 165" style="overflow: visible;">
+              <!-- Grid Lines -->
+              <line x1="40" y1="20" x2="480" y2="20" stroke="#f1f5f9" stroke-width="1" />
+              <line x1="40" y1="50" x2="480" y2="50" stroke="#f1f5f9" stroke-width="1" />
+              <line x1="40" y1="80" x2="480" y2="80" stroke="#f1f5f9" stroke-width="1" />
+              <line x1="40" y1="120" x2="480" y2="120" stroke="#cbd5e1" stroke-width="1.5" />
+              
+              <!-- Y-Axis Labels -->
+              <text x="32" y="24" fill="#94a3b8" font-size="9" text-anchor="end">20</text>
+              <text x="32" y="54" fill="#94a3b8" font-size="9" text-anchor="end">15</text>
+              <text x="32" y="84" fill="#94a3b8" font-size="9" text-anchor="end">10</text>
+              <text x="32" y="114" fill="#94a3b8" font-size="9" text-anchor="end">5</text>
+              <text x="32" y="124" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
 
-            <!-- Bar 1: < 60 Seconds -->
-            <rect id="svgFast" x="65" y="40" width="75" height="80" fill="#ef4444" rx="3" />
-            <text id="svgFastVal" x="102" y="32" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">83%</text>
-            <text x="102" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">&lt; 60 Seconds</text>
+              <!-- Bar 1: < 60 Seconds -->
+              <rect id="svgFast" x="65" y="40" width="75" height="80" fill="#ef4444" rx="3" />
+              <text id="svgFastVal" x="102" y="32" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">83%</text>
+              <text x="102" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">&lt; 60 Seconds</text>
 
-            <!-- Bar 2: 1 - 15 Mins -->
-            <rect id="svgMed" x="175" y="100" width="75" height="20" fill="#94a3b8" rx="3" />
-            <text id="svgMedVal" x="212" y="92" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">10%</text>
-            <text x="212" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">1 – 15 Mins</text>
+              <!-- Bar 2: 1 - 15 Mins -->
+              <rect id="svgMed" x="175" y="100" width="75" height="20" fill="#94a3b8" rx="3" />
+              <text id="svgMedVal" x="212" y="92" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">10%</text>
+              <text x="212" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">1 – 15 Mins</text>
 
-            <!-- Bar 3: 15 - 45 Mins -->
-            <rect id="svgNorm" x="285" y="110" width="75" height="10" fill="#94a3b8" rx="3" />
-            <text id="svgNormVal" x="322" y="102" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">5%</text>
-            <text x="322" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">15 – 45 Mins</text>
+              <!-- Bar 3: 15 - 45 Mins -->
+              <rect id="svgNorm" x="285" y="110" width="75" height="10" fill="#94a3b8" rx="3" />
+              <text id="svgNormVal" x="322" y="102" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">5%</text>
+              <text x="322" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">15 – 45 Mins</text>
 
-            <!-- Bar 4: > 45 Mins -->
-            <rect id="svgDeep" x="395" y="115" width="75" height="5" fill="#10b981" rx="3" />
-            <text id="svgDeepVal" x="432" y="107" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">2%</text>
-            <text x="432" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">&gt; 45 Mins</text>
-          </svg>
+              <!-- Bar 4: > 45 Mins -->
+              <rect id="svgDeep" x="395" y="115" width="75" height="5" fill="#10b981" rx="3" />
+              <text id="svgDeepVal" x="432" y="107" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">2%</text>
+              <text x="432" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">&gt; 45 Mins</text>
+            </svg>
+          </div>
+
+          <!-- View 2: NCIIPC 6-Axis Spider / Radar Graph -->
+          <div id="leftPaneRadar" class="graph-view-pane">
+            <svg width="100%" height="165" viewBox="0 0 500 165" style="overflow: visible;">
+              <!-- Concentric Rings (20%, 40%, 60%, 80%, 100%) -->
+              <polygon points="250.0,86.0 262.1,93.0 262.1,107.0 250.0,114.0 237.9,107.0 237.9,93.0" fill="none" stroke="#e2e8f0" stroke-width="1" />
+              <polygon points="250.0,72.0 274.2,86.0 274.2,114.0 250.0,128.0 225.8,114.0 225.8,86.0" fill="none" stroke="#e2e8f0" stroke-width="1" />
+              <polygon points="250.0,58.0 286.4,79.0 286.4,121.0 250.0,142.0 213.6,121.0 213.6,79.0" fill="none" stroke="#e2e8f0" stroke-width="1" />
+              <polygon points="250.0,44.0 298.5,72.0 298.5,128.0 250.0,156.0 201.5,128.0 201.5,72.0" fill="none" stroke="#e2e8f0" stroke-width="1" />
+              <polygon points="250.0,30.0 310.6,65.0 310.6,135.0 250.0,170.0 189.4,135.0 189.4,65.0" fill="none" stroke="#cbd5e1" stroke-width="1.2" />
+
+              <!-- Radial Spoke Lines -->
+              <line x1="250" y1="100" x2="250.0" y2="30.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2,2" />
+              <line x1="250" y1="100" x2="310.6" y2="65.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2,2" />
+              <line x1="250" y1="100" x2="310.6" y2="135.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2,2" />
+              <line x1="250" y1="100" x2="250.0" y2="170.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2,2" />
+              <line x1="250" y1="100" x2="189.4" y2="135.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2,2" />
+              <line x1="250" y1="100" x2="189.4" y2="65.0" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2,2" />
+
+              <!-- Peer Benchmark Baseline Polygon (Dashed Gray) -->
+              <polygon id="radarPeerPoly" points="250,47 296,73 294,124 250,158 205,124 204,73" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3" />
+
+              <!-- Entity Assessed Polygon (Dynamic) -->
+              <polygon id="radarEntityPoly" points="250,50 300,75 290,120 250,150 200,120 200,70" fill="rgba(239, 68, 68, 0.2)" stroke="#ef4444" stroke-width="2" />
+
+              <!-- Vertex Labels -->
+              <text x="250" y="20" fill="#0f172a" font-size="9" font-weight="700" text-anchor="middle">Triage Rigour (<span id="lblRadarRigour">17%</span>)</text>
+              <text x="322" y="64" fill="#0f172a" font-size="9" font-weight="700" text-anchor="start">Note Entropy (<span id="lblRadarEntropy">98%</span>)</text>
+              <text x="322" y="142" fill="#0f172a" font-size="9" font-weight="700" text-anchor="start">Escalation (<span id="lblRadarEscalate">0%</span>)</text>
+              <text x="250" y="180" fill="#0f172a" font-size="9" font-weight="700" text-anchor="middle">Coverage (<span id="lblRadarCoverage">56%</span>)</text>
+              <text x="178" y="142" fill="#0f172a" font-size="9" font-weight="700" text-anchor="end">MITRE Breadth (<span id="lblRadarMitre">40%</span>)</text>
+              <text x="178" y="64" fill="#0f172a" font-size="9" font-weight="700" text-anchor="end">Forensic Depth (<span id="lblRadarForensic">2%</span>)</text>
+            </svg>
+            <div style="display: flex; justify-content: center; gap: 20px; font-size: 0.68rem; margin-top: 2px; color: var(--text-muted);">
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 12px; height: 3px; background: #ef4444; border-radius: 2px;"></span> <strong id="radarLegendEntity">Current Entity</strong></span>
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 12px; height: 0px; border-top: 2px dashed #94a3b8;"></span> <span>National Peer Cohort Baseline</span></span>
+            </div>
+          </div>
+
+          <!-- View 3: Hourly Ingestion vs Gaming Spikes Timeline -->
+          <div id="leftPaneTimeline" class="graph-view-pane">
+            <svg width="100%" height="165" viewBox="0 0 500 165" style="overflow: visible;">
+              <!-- Grid -->
+              <line x1="40" y1="25" x2="480" y2="25" stroke="#f1f5f9" stroke-width="1" />
+              <line x1="40" y1="65" x2="480" y2="65" stroke="#f1f5f9" stroke-width="1" />
+              <line x1="40" y1="105" x2="480" y2="105" stroke="#f1f5f9" stroke-width="1" />
+              <line x1="40" y1="135" x2="480" y2="135" stroke="#cbd5e1" stroke-width="1.5" />
+
+              <!-- Timeline Area (Normal Traffic: Blue) -->
+              <path id="timelineNormalPath" d="M40,135 Q100,120 160,110 T280,105 T380,95 T480,110 L480,135 Z" fill="rgba(2, 132, 199, 0.12)" />
+              <path id="timelineNormalLine" d="M40,135 Q100,120 160,110 T280,105 T380,95 T480,110" fill="none" stroke="#0284c7" stroke-width="2" />
+
+              <!-- SLA Gaming Spike Peak: Red -->
+              <path id="timelineSpikePath" d="M300,135 Q340,30 380,135 Z" fill="rgba(239, 68, 68, 0.25)" />
+              <path id="timelineSpikeLine" d="M300,135 Q340,30 380,135" fill="none" stroke="#ef4444" stroke-width="2.5" />
+              
+              <!-- Callout Marker -->
+              <circle cx="340" cy="55" r="4" fill="#ef4444" />
+              <text x="340" y="44" fill="#b91c1c" font-size="9.5" font-weight="700" text-anchor="middle">SLA Gaming Spike (16:00–17:30)</text>
+
+              <!-- X-Axis Hours -->
+              <text x="40" y="148" fill="#94a3b8" font-size="9" text-anchor="middle">00:00</text>
+              <text x="128" y="148" fill="#94a3b8" font-size="9" text-anchor="middle">06:00</text>
+              <text x="216" y="148" fill="#94a3b8" font-size="9" text-anchor="middle">12:00</text>
+              <text x="340" y="148" fill="#94a3b8" font-size="9" text-anchor="middle">16:30 Peak</text>
+              <text x="480" y="148" fill="#94a3b8" font-size="9" text-anchor="middle">24:00</text>
+            </svg>
+            <div style="display: flex; justify-content: center; gap: 20px; font-size: 0.68rem; margin-top: 2px; color: var(--text-muted);">
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; background: #0284c7; border-radius: 2px;"></span> Regular Ingestion</span>
+              <span style="display: flex; align-items: center; gap: 5px;"><span style="width: 10px; height: 10px; background: #ef4444; border-radius: 2px;"></span> SLA Gaming Batch Closures</span>
+            </div>
+          </div>
         </div>
 
-        <!-- Visual Key 2: Operational Assurance Deficit Breakdown -->
+        <!-- Visual Key 2: Operational Assurance Deficit & Dispositions -->
         <div class="panel">
-          <div class="panel-head">
+          <div class="panel-head" style="align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
             <div style="display: flex; align-items: center; gap: 10px;">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <div>
-                <h4 style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Visual Key: Operational Assurance Deficit Breakdown</h4>
+                <h4 style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;" class="editorial-heading" id="rightGraphTitle">Visual Key: Operational Assurance Deficit Breakdown</h4>
                 <p style="font-size: 0.72rem; color: var(--text-muted);">Computed specifically for <strong id="dashEntityNameSub" style="color: var(--text-main);">-</strong></p>
+              </div>
+            </div>
+            <!-- Graph Toggle Switcher -->
+            <div class="graph-tab-group">
+              <button class="graph-tab-btn active" id="tabRightMeters" onclick="switchRightGraph('meters')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                Assurance Gauges
+              </button>
+              <button class="graph-tab-btn" id="tabRightDonut" onclick="switchRightGraph('donut')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+                Disposition Donut
+              </button>
+              <button class="graph-tab-btn" id="tabRightPeer" onclick="switchRightGraph('peer')">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M16 16v1a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v1"/><line x1="18" y1="8" x2="23" y2="8"/></svg>
+                Peer Benchmark
+              </button>
+            </div>
+          </div>
+
+          <!-- View 1: 4 Assurance Deficit Progress Meters (Default) -->
+          <div id="rightPaneMeters" class="graph-view-pane active">
+            <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 4px;">
+              <!-- Gauge 1: Triage Velocity Rigour -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                  <span style="color: var(--text-body);">Triage Velocity Rigour (Non-Gaming)</span>
+                  <span id="meterVelocityVal" style="font-weight: 700; color: #ef4444;">17% Rigour (83% Gaming)</span>
+                </div>
+                <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                  <div id="meterVelocityBar" style="height: 100%; width: 17%; background: #ef4444; border-radius: 4px; transition: width 0.3s ease;"></div>
+                </div>
+              </div>
+
+              <!-- Gauge 2: Investigation Note Uniqueness -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                  <span style="color: var(--text-body);">Investigation Note Uniqueness (Shannon Entropy)</span>
+                  <span id="meterTemplateVal" style="font-weight: 700; color: #10b981;">92% Unique (8% Clones)</span>
+                </div>
+                <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                  <div id="meterTemplateBar" style="height: 100%; width: 92%; background: #10b981; border-radius: 4px; transition: width 0.3s ease;"></div>
+                </div>
+              </div>
+
+              <!-- Gauge 3: Senior Escalation Adherence -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                  <span style="color: var(--text-body);">Senior Escalation Hierarchy Adherence</span>
+                  <span id="meterEscalateVal" style="font-weight: 700; color: #d97706;">80% Bypassed</span>
+                </div>
+                <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                  <div id="meterEscalateBar" style="height: 100%; width: 80%; background: #f59e0b; border-radius: 4px; transition: width 0.3s ease;"></div>
+                </div>
+              </div>
+
+              <!-- Gauge 4: Asset Telemetry Coverage -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                  <span style="color: var(--text-body);">Asset Telemetry Coverage (Negative Space)</span>
+                  <span id="meterCoverageVal" style="font-weight: 700; color: #d97706;">4 Silent Nodes Detected</span>
+                </div>
+                <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                  <div id="meterCoverageBar" style="height: 100%; width: 56%; background: #f59e0b; border-radius: 4px; transition: width 0.3s ease;"></div>
+                </div>
               </div>
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 4px;">
-            <!-- Gauge 1: Triage Velocity Rigour -->
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
-                <span style="color: var(--text-body);">Triage Velocity Rigour (Non-Gaming)</span>
-                <span id="meterVelocityVal" style="font-weight: 700; color: #ef4444;">17% Rigour (83% Gaming)</span>
-              </div>
-              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
-                <div id="meterVelocityBar" style="height: 100%; width: 17%; background: #ef4444; border-radius: 4px; transition: width 0.3s ease;"></div>
+          <!-- View 2: Incident Disposition & SLA Integrity Donut -->
+          <div id="rightPaneDonut" class="graph-view-pane">
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 4px;">
+              <!-- Donut Chart SVG -->
+              <svg width="180" height="165" viewBox="0 0 180 165" style="flex-shrink: 0;">
+                <circle cx="90" cy="82" r="52" fill="none" stroke="#f1f5f9" stroke-width="22" />
+                <!-- Donut Segments (circumference = 326.7) -->
+                <circle id="donutSeg1" cx="90" cy="82" r="52" fill="none" stroke="#ef4444" stroke-width="22" stroke-dasharray="271 56" stroke-dashoffset="0" transform="rotate(-90 90 82)" />
+                <circle id="donutSeg2" cx="90" cy="82" r="52" fill="none" stroke="#0284c7" stroke-width="22" stroke-dasharray="33 294" stroke-dashoffset="-271" transform="rotate(-90 90 82)" />
+                <circle id="donutSeg3" cx="90" cy="82" r="52" fill="none" stroke="#94a3b8" stroke-width="22" stroke-dasharray="16 311" stroke-dashoffset="-304" transform="rotate(-90 90 82)" />
+                <circle id="donutSeg4" cx="90" cy="82" r="52" fill="none" stroke="#10b981" stroke-width="22" stroke-dasharray="7 320" stroke-dashoffset="-320" transform="rotate(-90 90 82)" />
+                
+                <!-- Center Cutout Text -->
+                <text x="90" y="78" fill="#0f172a" font-size="18" font-weight="800" text-anchor="middle" id="donutCenterVal">41</text>
+                <text x="90" y="94" fill="#64748b" font-size="8.5" font-weight="700" text-anchor="middle">ECRI INDEX</text>
+              </svg>
+
+              <!-- Donut Legend & Stats -->
+              <div style="flex: 1; padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem;">
+                  <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; background: #ef4444; border-radius: 50%;"></span> <span style="font-weight: 600;">SLA Gaming (&lt;60s Closures)</span></span>
+                  <strong style="color: #b91c1c;" id="donutPctGaming">83%</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem;">
+                  <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; background: #0284c7; border-radius: 50%;"></span> <span style="font-weight: 600;">Routine Operations / Maint.</span></span>
+                  <strong style="color: #0369a1;" id="donutPctMaint">10%</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem;">
+                  <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; background: #94a3b8; border-radius: 50%;"></span> <span style="font-weight: 600;">Benign Noise Verified</span></span>
+                  <strong style="color: #475569;" id="donutPctBenign">5%</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.74rem;">
+                  <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 9px; height: 9px; background: #10b981; border-radius: 50%;"></span> <span style="font-weight: 600;">Forensic Deep Triage</span></span>
+                  <strong style="color: #15803d;" id="donutPctDeep">2%</strong>
+                </div>
               </div>
             </div>
+          </div>
 
-            <!-- Gauge 2: Investigation Note Uniqueness -->
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
-                <span style="color: var(--text-body);">Investigation Note Uniqueness (Shannon Entropy)</span>
-                <span id="meterTemplateVal" style="font-weight: 700; color: #10b981;">92% Unique (8% Clones)</span>
+          <!-- View 3: Entity vs National Peer Cohort Comparison -->
+          <div id="rightPanePeer" class="graph-view-pane">
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
+              <!-- Comparison 1 -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 3px;">
+                  <strong style="color: var(--text-body);">Triage Rigour (SLA Non-Gaming)</strong>
+                  <span><strong id="peerEntRigour" style="color: #ef4444;">17%</strong> vs <span style="color: #64748b;">Cohort 72%</span></span>
+                </div>
+                <div style="height: 6px; background: #f1f5f9; border-radius: 3px; position: relative; overflow: hidden;">
+                  <div id="peerBarRigour" style="height: 100%; width: 17%; background: #ef4444;"></div>
+                  <div style="position: absolute; left: 72%; top: 0; bottom: 0; width: 2px; background: #0f172a;" title="Cohort Baseline: 72%"></div>
+                </div>
               </div>
-              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
-                <div id="meterTemplateBar" style="height: 100%; width: 92%; background: #10b981; border-radius: 4px; transition: width 0.3s ease;"></div>
+
+              <!-- Comparison 2 -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 3px;">
+                  <strong style="color: var(--text-body);">Investigation Note Shannon Entropy</strong>
+                  <span><strong id="peerEntEntropy" style="color: #10b981;">92%</strong> vs <span style="color: #64748b;">Cohort 85%</span></span>
+                </div>
+                <div style="height: 6px; background: #f1f5f9; border-radius: 3px; position: relative; overflow: hidden;">
+                  <div id="peerBarEntropy" style="height: 100%; width: 92%; background: #10b981;"></div>
+                  <div style="position: absolute; left: 85%; top: 0; bottom: 0; width: 2px; background: #0f172a;" title="Cohort Baseline: 85%"></div>
+                </div>
+              </div>
+
+              <!-- Comparison 3 -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 3px;">
+                  <strong style="color: var(--text-body);">Senior Escalation Hierarchy Adherence</strong>
+                  <span><strong id="peerEntEscalate" style="color: #ef4444;">0%</strong> vs <span style="color: #64748b;">Cohort 78%</span></span>
+                </div>
+                <div style="height: 6px; background: #f1f5f9; border-radius: 3px; position: relative; overflow: hidden;">
+                  <div id="peerBarEscalate" style="height: 100%; width: 4%; background: #ef4444;"></div>
+                  <div style="position: absolute; left: 78%; top: 0; bottom: 0; width: 2px; background: #0f172a;" title="Cohort Baseline: 78%"></div>
+                </div>
+              </div>
+
+              <!-- Comparison 4 -->
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 3px;">
+                  <strong style="color: var(--text-body);">Section 70A Critical Telemetry Coverage</strong>
+                  <span><strong id="peerEntCoverage" style="color: #f59e0b;">56%</strong> vs <span style="color: #64748b;">Cohort 92%</span></span>
+                </div>
+                <div style="height: 6px; background: #f1f5f9; border-radius: 3px; position: relative; overflow: hidden;">
+                  <div id="peerBarCoverage" style="height: 100%; width: 56%; background: #f59e0b;"></div>
+                  <div style="position: absolute; left: 92%; top: 0; bottom: 0; width: 2px; background: #0f172a;" title="Cohort Baseline: 92%"></div>
+                </div>
               </div>
             </div>
-
-            <!-- Gauge 3: Senior Escalation Adherence -->
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
-                <span style="color: var(--text-body);">Senior Escalation Hierarchy Adherence</span>
-                <span id="meterEscalateVal" style="font-weight: 700; color: #d97706;">80% Bypassed</span>
-              </div>
-              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
-                <div id="meterEscalateBar" style="height: 100%; width: 80%; background: #f59e0b; border-radius: 4px; transition: width 0.3s ease;"></div>
-              </div>
-            </div>
-
-            <!-- Gauge 4: Asset Telemetry Coverage -->
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
-                <span style="color: var(--text-body);">Asset Telemetry Coverage (Negative Space)</span>
-                <span id="meterCoverageVal" style="font-weight: 700; color: #d97706;">4 Silent Nodes Detected</span>
-              </div>
-              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
-                <div id="meterCoverageBar" style="height: 100%; width: 56%; background: #f59e0b; border-radius: 4px; transition: width 0.3s ease;"></div>
-              </div>
+            <div style="text-align: right; font-size: 0.65rem; color: var(--text-muted); margin-top: 6px;">
+              <span style="display: inline-block; width: 8px; height: 8px; background: #0f172a; margin-right: 4px; vertical-align: middle;"></span> Black tick indicates National Sector Peer Cohort Baseline
             </div>
           </div>
         </div>
@@ -1858,6 +2112,211 @@
       document.getElementById('meterCoverageVal').innerText = d.coverageVal || (d.silentNodes && d.silentNodes.length > 0 ? `${d.silentNodes.length} Silent Nodes Detected` : "100% Full Telemetry");
       document.getElementById('meterCoverageBar').style.width = d.coverageBarWidth || (d.silentNodes && d.silentNodes.length > 0 ? "56%" : "100%");
       document.getElementById('meterCoverageBar').style.background = d.silentNodes && d.silentNodes.length > 0 ? '#f59e0b' : '#10b981';
+
+      // Update All Multi-View Visual Graphs
+      updateRadarPolygon(d);
+      updateDonutChart(d);
+      updatePeerChart(d);
+      updateTimelineGraph(d);
+    }
+
+    // Toggle Left Graph Views (Histogram vs Spider/Radar vs Hourly Spikes)
+    function switchLeftGraph(type) {
+      const tabs = ['hist', 'radar', 'timeline'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('tabLeft' + t.charAt(0).toUpperCase() + t.slice(1));
+        const pane = document.getElementById('leftPane' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (btn) btn.classList.toggle('active', t === type);
+        if (pane) pane.classList.toggle('active', t === type);
+      });
+
+      const title = document.getElementById('leftGraphTitle');
+      const sub = document.getElementById('leftGraphSub');
+      if (type === 'hist') {
+        if (title) title.innerText = "Visual Key: Triage Velocity Distribution (SLA Speed Gaming)";
+        if (sub) sub.innerText = "Tall red bar indicates unnatural <60s closures";
+      } else if (type === 'radar') {
+        if (title) title.innerText = "Visual Key: NCIIPC 6-Axis Regulatory Spider Graph";
+        if (sub) sub.innerText = "Multidimensional SOC surveillance posture vs National Cohort baseline";
+      } else if (type === 'timeline') {
+        if (title) title.innerText = "Visual Key: 24-Hour Alert Volume & Batch Gaming Spikes";
+        if (sub) sub.innerText = "Temporal analysis of end-of-shift ticket flushing anomalies";
+      }
+    }
+
+    // Toggle Right Graph Views (Assurance Gauges vs Disposition Donut vs Peer Benchmark)
+    function switchRightGraph(type) {
+      const tabs = ['meters', 'donut', 'peer'];
+      tabs.forEach(t => {
+        const btn = document.getElementById('tabRight' + t.charAt(0).toUpperCase() + t.slice(1));
+        const pane = document.getElementById('rightPane' + t.charAt(0).toUpperCase() + t.slice(1));
+        if (btn) btn.classList.toggle('active', t === type);
+        if (pane) pane.classList.toggle('active', t === type);
+      });
+
+      const title = document.getElementById('rightGraphTitle');
+      const sub = document.getElementById('dashEntityNameSub');
+      const curName = activeEvaluationData ? activeEvaluationData.name : "-";
+      if (type === 'meters') {
+        if (title) title.innerText = "Visual Key: Operational Assurance Deficit Breakdown";
+        if (sub && sub.parentElement) sub.parentElement.innerHTML = `Computed specifically for <strong id="dashEntityNameSub" style="color: var(--text-main);">${curName}</strong>`;
+      } else if (type === 'donut') {
+        if (title) title.innerText = "Visual Key: Incident Disposition & SLA Integrity Donut";
+        if (sub && sub.parentElement) sub.parentElement.innerHTML = `Breakdown of resolution depth for <strong id="dashEntityNameSub" style="color: var(--text-main);">${curName}</strong>`;
+      } else if (type === 'peer') {
+        if (title) title.innerText = "Visual Key: Entity vs National Sector Peer Cohort Benchmark";
+        if (sub && sub.parentElement) sub.parentElement.innerHTML = `Comparative gap analysis for <strong id="dashEntityNameSub" style="color: var(--text-main);">${curName}</strong>`;
+      }
+    }
+
+    // Dynamic 6-Axis Spider / Radar Calculation
+    function updateRadarPolygon(d) {
+      const v0 = Math.max(5, Math.min(100, 100 - (d.histFastPct || 0)));
+      const tVal = parseFloat(d.templateVal) || 10;
+      const v1 = Math.max(5, Math.min(100, 100 - tVal));
+      const v2 = d.ecri > 70 ? 95 : (d.ecri > 50 ? 50 : 8);
+      const v3 = (!d.silentNodes || d.silentNodes.length === 0) ? 100 : Math.max(15, 100 - (d.silentNodes.length * 15));
+      const v4 = (d.mitreCredVoid || d.mitreLateralVoid) ? 40 : 90;
+      const v5 = Math.max(4, Math.min(100, (d.histDeepPct || 2) * 2 + 5));
+
+      const cx = 250;
+      const cy = 100;
+      const R = 70;
+
+      const vals = [v0, v1, v2, v3, v4, v5];
+      const angles = [0, Math.PI / 3, (2 * Math.PI) / 3, Math.PI, (4 * Math.PI) / 3, (5 * Math.PI) / 3];
+
+      const points = vals.map((v, i) => {
+        const r = (v / 100) * R;
+        const x = (cx + r * Math.sin(angles[i])).toFixed(1);
+        const y = (cy - r * Math.cos(angles[i])).toFixed(1);
+        return `${x},${y}`;
+      }).join(' ');
+
+      const poly = document.getElementById('radarEntityPoly');
+      if (poly) {
+        poly.setAttribute('points', points);
+        if (d.ecri < 50) {
+          poly.setAttribute('fill', 'rgba(239, 68, 68, 0.22)');
+          poly.setAttribute('stroke', '#ef4444');
+        } else if (d.ecri < 75) {
+          poly.setAttribute('fill', 'rgba(245, 158, 11, 0.22)');
+          poly.setAttribute('stroke', '#f59e0b');
+        } else {
+          poly.setAttribute('fill', 'rgba(16, 185, 129, 0.22)');
+          poly.setAttribute('stroke', '#10b981');
+        }
+      }
+
+      const elR0 = document.getElementById('lblRadarRigour'); if (elR0) elR0.innerText = `${Math.round(v0)}%`;
+      const elR1 = document.getElementById('lblRadarEntropy'); if (elR1) elR1.innerText = `${Math.round(v1)}%`;
+      const elR2 = document.getElementById('lblRadarEscalate'); if (elR2) elR2.innerText = `${Math.round(v2)}%`;
+      const elR3 = document.getElementById('lblRadarCoverage'); if (elR3) elR3.innerText = `${Math.round(v3)}%`;
+      const elR4 = document.getElementById('lblRadarMitre'); if (elR4) elR4.innerText = `${Math.round(v4)}%`;
+      const elR5 = document.getElementById('lblRadarForensic'); if (elR5) elR5.innerText = `${Math.round(v5)}%`;
+
+      const legend = document.getElementById('radarLegendEntity');
+      if (legend) legend.innerText = `${d.name} (${d.ecri}/100)`;
+    }
+
+    // Dynamic Donut Chart Calculation
+    function updateDonutChart(d) {
+      const C = 326.72;
+      const p1 = d.histFastPct || 0;
+      const p2 = d.histMedPct || 0;
+      const p3 = d.histNormPct || 0;
+      const p4 = Math.max(1, 100 - (p1 + p2 + p3));
+
+      const L1 = (p1 / 100) * C;
+      const L2 = (p2 / 100) * C;
+      const L3 = (p3 / 100) * C;
+      const L4 = (p4 / 100) * C;
+
+      const seg1 = document.getElementById('donutSeg1');
+      const seg2 = document.getElementById('donutSeg2');
+      const seg3 = document.getElementById('donutSeg3');
+      const seg4 = document.getElementById('donutSeg4');
+
+      if (seg1) {
+        seg1.setAttribute('stroke-dasharray', `${L1.toFixed(1)} ${(C - L1).toFixed(1)}`);
+        seg1.setAttribute('stroke-dashoffset', '0');
+      }
+      if (seg2) {
+        seg2.setAttribute('stroke-dasharray', `${L2.toFixed(1)} ${(C - L2).toFixed(1)}`);
+        seg2.setAttribute('stroke-dashoffset', `-${L1.toFixed(1)}`);
+      }
+      if (seg3) {
+        seg3.setAttribute('stroke-dasharray', `${L3.toFixed(1)} ${(C - L3).toFixed(1)}`);
+        seg3.setAttribute('stroke-dashoffset', `-${(L1 + L2).toFixed(1)}`);
+      }
+      if (seg4) {
+        seg4.setAttribute('stroke-dasharray', `${L4.toFixed(1)} ${(C - L4).toFixed(1)}`);
+        seg4.setAttribute('stroke-dashoffset', `-${(L1 + L2 + L3).toFixed(1)}`);
+      }
+
+      const centerVal = document.getElementById('donutCenterVal');
+      if (centerVal) centerVal.textContent = d.ecri;
+
+      const pctGaming = document.getElementById('donutPctGaming'); if (pctGaming) pctGaming.innerText = `${p1}%`;
+      const pctMaint = document.getElementById('donutPctMaint'); if (pctMaint) pctMaint.innerText = `${p2}%`;
+      const pctBenign = document.getElementById('donutPctBenign'); if (pctBenign) pctBenign.innerText = `${p3}%`;
+      const pctDeep = document.getElementById('donutPctDeep'); if (pctDeep) pctDeep.innerText = `${p4}%`;
+    }
+
+    // Dynamic Peer Benchmark Comparison
+    function updatePeerChart(d) {
+      const v0 = Math.max(0, 100 - (d.histFastPct || 0));
+      const tVal = parseFloat(d.templateVal) || 10;
+      const v1 = Math.max(0, 100 - tVal);
+      const v2 = d.ecri > 70 ? 95 : (d.ecri > 50 ? 50 : 4);
+      const v3 = (!d.silentNodes || d.silentNodes.length === 0) ? 100 : Math.max(15, 100 - (d.silentNodes.length * 15));
+
+      const pRigour = document.getElementById('peerEntRigour');
+      const bRigour = document.getElementById('peerBarRigour');
+      if (pRigour) pRigour.innerText = `${v0}%`;
+      if (bRigour) {
+        bRigour.style.width = `${v0}%`;
+        bRigour.style.background = v0 < 40 ? '#ef4444' : '#10b981';
+      }
+
+      const pEntropy = document.getElementById('peerEntEntropy');
+      const bEntropy = document.getElementById('peerBarEntropy');
+      if (pEntropy) pEntropy.innerText = `${Math.round(v1)}%`;
+      if (bEntropy) {
+        bEntropy.style.width = `${Math.round(v1)}%`;
+        bEntropy.style.background = v1 < 40 ? '#ef4444' : '#10b981';
+      }
+
+      const pEscalate = document.getElementById('peerEntEscalate');
+      const bEscalate = document.getElementById('peerBarEscalate');
+      if (pEscalate) pEscalate.innerText = `${v2}%`;
+      if (bEscalate) {
+        bEscalate.style.width = `${v2}%`;
+        bEscalate.style.background = v2 < 50 ? '#ef4444' : '#10b981';
+      }
+
+      const pCoverage = document.getElementById('peerEntCoverage');
+      const bCoverage = document.getElementById('peerBarCoverage');
+      if (pCoverage) pCoverage.innerText = `${v3}%`;
+      if (bCoverage) {
+        bCoverage.style.width = `${v3}%`;
+        bCoverage.style.background = v3 < 80 ? '#f59e0b' : '#10b981';
+      }
+    }
+
+    // Dynamic Hourly Ingestion vs Gaming Spikes Timeline
+    function updateTimelineGraph(d) {
+      const spikePath = document.getElementById('timelineSpikePath');
+      const spikeLine = document.getElementById('timelineSpikeLine');
+      if (spikePath && spikeLine) {
+        if (d.histFastPct > 15) {
+          spikePath.style.display = 'block';
+          spikeLine.style.display = 'block';
+        } else {
+          spikePath.style.display = 'none';
+          spikeLine.style.display = 'none';
+        }
+      }
     }
 
     // POPULATE EXECUTION GAPS SCREEN
