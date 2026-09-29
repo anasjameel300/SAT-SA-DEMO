@@ -6,56 +6,86 @@
   <title>SAT-SA | Supervisory Analytics Tool for SOC Assessment</title>
   <style>
     :root {
-      --bg-body: #050507;
-      --bg-sidebar: #09090c;
-      --bg-card: #0f0f13;
-      --bg-card-hover: #15151a;
-      --border-subtle: #1e1e24;
-      --border-strong: #2e2e38;
-      --border-focus: #52525e;
-      --text-white: #ffffff;
-      --text-dim: #a1a1aa;
-      --text-muted: #71717a;
-      --badge-critical-bg: #271415;
-      --badge-critical-border: #7f1d1d;
-      --badge-critical-text: #fca5a5;
-      --badge-warning-bg: #261c10;
-      --badge-warning-border: #78350f;
-      --badge-warning-text: #fde68a;
-      --badge-healthy-bg: #122018;
-      --badge-healthy-border: #064e3b;
-      --badge-healthy-text: #a7f3d0;
+      /* Exact GovTech Regulatory Color Tokens from Reference */
+      --bg-body: #f1f4f9;
+      --bg-sidebar: #182d48;
+      --bg-sidebar-hover: #1f3757;
+      --bg-card: #ffffff;
+      --bg-card-hover: #f8fafc;
+      
+      --border-subtle: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --border-focus: #94a3b8;
+      --border-sidebar: rgba(255, 255, 255, 0.08);
+
+      --text-main: #0a1e36;
+      --text-body: #334155;
+      --text-muted: #5a6e85;
+      --text-dim: #94a3b8;
+      
+      --sidebar-text: #94a3b8;
+      --sidebar-text-bright: #ffffff;
+
+      --primary-navy: #182d48;
+      --primary-navy-hover: #223f64;
+      --primary-blue: #0284c7;
+
+      /* Status Badges */
+      --badge-critical-bg: #fef2f2;
+      --badge-critical-border: #fecaca;
+      --badge-critical-text: #b91c1c;
+
+      --badge-warning-bg: #fffbeb;
+      --badge-warning-border: #fde68a;
+      --badge-warning-text: #b45309;
+
+      --badge-healthy-bg: #ecfdf5;
+      --badge-healthy-border: #a7f3d0;
+      --badge-healthy-text: #15803d;
+
+      --badge-neutral-bg: #f1f5f9;
+      --badge-neutral-border: #e2e8f0;
+      --badge-neutral-text: #475569;
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
     }
 
     body {
       background-color: var(--bg-body);
-      color: var(--text-white);
+      color: var(--text-main);
       min-height: 100vh;
       display: flex;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* LEFT VERTICAL SIDEBAR LAYOUT (Replaces clunky horizontal tabs) */
+    /* STATELY SERIF FOR REGULATORY HEADINGS */
+    h1, h2, .editorial-heading {
+      font-family: "Georgia", "Cambria", "Times New Roman", Times, serif;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+
+    /* LEFT VERTICAL SIDEBAR (STATELY NAVY #182D48) */
     aside {
-      width: 280px;
+      width: 275px;
       background-color: var(--bg-sidebar);
-      border-right: 1px solid var(--border-subtle);
+      border-right: 1px solid rgba(0, 0, 0, 0.15);
       display: flex;
       flex-direction: column;
       position: sticky;
       top: 0;
       height: 100vh;
       flex-shrink: 0;
-      padding: 20px 16px;
+      padding: 24px 16px 16px 16px;
       z-index: 50;
+      box-shadow: 4px 0 16px rgba(11, 26, 48, 0.15);
+      overflow-y: auto;
     }
 
     .sidebar-brand {
@@ -63,68 +93,80 @@
       align-items: center;
       gap: 12px;
       padding-bottom: 18px;
-      border-bottom: 1px solid var(--border-subtle);
-      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-sidebar);
+      margin-bottom: 18px;
     }
 
-    .emblem {
-      width: 36px;
-      height: 36px;
-      background: #ffffff;
-      color: #000000;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 900;
-      font-size: 16px;
+    /* CRISP WHITE EMBLEM */
+    .emblem-img {
+      width: 44px;
+      height: auto;
+      max-height: 54px;
       flex-shrink: 0;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
     }
 
     .brand-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      line-height: 1.2;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+      line-height: 1.15;
     }
 
     .brand-sub {
       font-size: 0.65rem;
-      color: var(--text-muted);
+      color: #94a3b8;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-top: 2px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      margin-top: 3px;
     }
 
     /* Sidebar Status Badges */
     .sidebar-status-group {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      margin-bottom: 24px;
+      gap: 7px;
+      margin-bottom: 22px;
     }
 
     .status-pill {
       display: flex;
       align-items: center;
       gap: 8px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-subtle);
-      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 7px 12px;
       border-radius: 6px;
       font-size: 0.72rem;
-      color: var(--text-dim);
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .status-pill.air-gap {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.25);
+      color: #fca5a5;
     }
 
     .dot {
-      width: 6px;
-      height: 6px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: var(--text-muted);
+      background: #64748b;
     }
 
-    .dot.live { background: #10b981; box-shadow: 0 0 8px #10b981; }
-    .dot.ready { background: #ffffff; }
+    .dot.live { 
+      background: #10b981; 
+      box-shadow: 0 0 8px #10b981; 
+    }
+
+    .dot.airgap-dot {
+      background: #ef4444;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+    }
 
     /* Vertical Navigation Menu */
     .nav-menu {
@@ -139,124 +181,258 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
-      padding: 10px 14px;
+      padding: 10px 12px;
       background: transparent;
       border: 1px solid transparent;
       border-radius: 6px;
-      color: var(--text-muted);
+      color: #94a3b8;
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       text-align: left;
       transition: all 0.15s ease;
+      gap: 8px;
+    }
+
+    .nav-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      stroke-width: 2;
+      color: #64748b;
+      flex-shrink: 0;
     }
 
     .nav-item:hover:not(.disabled) {
-      color: var(--text-white);
-      background: var(--bg-card);
-      border-color: var(--border-subtle);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
     }
 
+    .nav-item:hover:not(.disabled) .nav-icon {
+      color: #ffffff;
+    }
+
+    /* Active Nav Item: Crisp Solid Light Pill */
     .nav-item.active {
-      color: #000000;
+      color: #0b1a30;
       background: #ffffff;
       border-color: #ffffff;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .nav-item.active .nav-icon {
+      color: #0b1a30;
     }
 
     .nav-item.disabled {
-      opacity: 0.35;
+      opacity: 0.5;
       cursor: not-allowed;
+      color: #64748b;
     }
 
     .nav-tag {
       font-size: 0.65rem;
-      padding: 2px 6px;
+      font-weight: 700;
+      padding: 2px 7px;
       border-radius: 4px;
-      background: rgba(255, 255, 255, 0.1);
-      color: inherit;
+      background: rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
     }
 
-    /* MAIN CONTENT WRAPPER */
+    .nav-item.active .nav-tag {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .nav-tag.ready {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    /* Seamless Edge-to-Edge Sidebar Footer with Rashtrapati Bhavan & Tiranga Blend */
+    .sidebar-footer {
+      margin-top: auto;
+      margin-left: -16px;
+      margin-right: -16px;
+      margin-bottom: -16px;
+      padding: 105px 16px 16px 16px;
+      background-image: url('assets/sidebar_monument.png');
+      background-size: 100% auto;
+      background-repeat: no-repeat;
+      background-position: bottom center;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+    }
+
+    .btn-sidebar-reset {
+      width: 100%;
+      font-size: 0.74rem;
+      padding: 8px 10px;
+      background: rgba(18, 38, 62, 0.85);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #cbd5e1;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-sidebar-reset:hover {
+      background: rgba(28, 54, 88, 0.95);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+    }
+
+    /* MAIN CONTENT VIEWPORT */
     .content-area {
       flex: 1;
-      padding: 32px 40px;
-      max-width: 1380px;
+      padding: 28px 48px;
+      max-width: 1440px;
       margin: 0 auto;
       width: 100%;
+      position: relative;
     }
 
-    /* Executive Top Bar in Content */
+    /* Executive Top Bar in Content - Bound to Monument Header Watermark */
     .top-toolbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 20px;
+      min-height: 74px;
+      padding-bottom: 18px;
       border-bottom: 1px solid var(--border-subtle);
       margin-bottom: 24px;
+      position: relative;
+      z-index: 10;
+      background-image: url('assets/header_monument_perfect.png');
+      background-repeat: no-repeat;
+      background-position: center right;
+      background-size: auto 65px;
+    }
+
+    .page-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .page-title-icon-tile {
+      width: 40px;
+      height: 40px;
+      background: #e2edf8;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1d4ed8;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
     }
 
     .page-title h2 {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.3px;
+      font-size: 1.48rem;
+      color: var(--text-main);
+      line-height: 1.15;
     }
 
     .page-title p {
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      margin-top: 2px;
+      margin-top: 3px;
+      font-weight: 500;
     }
 
-    /* Minimalist Buttons */
-    .btn-white {
-      background: #ffffff;
-      color: #000000;
-      border: none;
+    .badge-awaiting {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #fdf6ed;
+      border: 1px solid #f5d5b5;
+      color: #8a4e1b;
+      padding: 6px 14px;
       border-radius: 6px;
-      padding: 8px 16px;
       font-size: 0.78rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
 
-    .btn-white:hover { background: #e4e4e7; }
+    /* Buttons */
+    .btn-navy {
+      background: var(--primary-navy);
+      color: #ffffff;
+      border: 1px solid var(--primary-navy);
+      border-radius: 6px;
+      padding: 9px 18px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      box-shadow: 0 2px 4px rgba(11, 26, 48, 0.15);
+      transition: all 0.15s ease;
+    }
+
+    .btn-navy:hover { 
+      background: var(--primary-navy-hover); 
+      border-color: var(--primary-navy-hover);
+    }
 
     .btn-outline {
-      background: transparent;
-      color: var(--text-white);
-      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      color: var(--text-body);
+      border: 1px solid var(--border-strong);
       border-radius: 6px;
       padding: 8px 14px;
       font-size: 0.76rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .btn-outline:hover {
       border-color: var(--border-focus);
-      background: rgba(255, 255, 255, 0.04);
+      background: #f8fafc;
+      color: var(--text-main);
     }
 
-    .btn-outline.active {
-      background: #ffffff;
-      color: #000000;
-      border-color: #ffffff;
-    }
-
-    /* Alert Toast */
+    /* Top Real-time Alert Banner */
     .alert-banner {
-      background: var(--bg-card);
-      border: 1px solid var(--border-strong);
-      border-left: 4px solid #ffffff;
-      padding: 14px 18px;
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-left: 4px solid #10b981;
+      padding: 12px 18px;
       border-radius: 6px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 0.8rem;
+      box-shadow: 0 1px 3px rgba(16, 185, 129, 0.08);
+    }
+
+    .alert-banner-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #065f46;
     }
 
     /* Cards & Panels */
@@ -264,8 +440,9 @@
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
-      padding: 24px;
+      padding: 24px 26px;
       margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.015);
     }
 
     .panel-head {
@@ -281,36 +458,93 @@
     .grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .grid-4col { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 
-    /* KPI Block */
+    /* KPI Blocks */
     .kpi-block {
-      background: var(--bg-body);
+      background: #ffffff;
       border: 1px solid var(--border-subtle);
-      border-radius: 6px;
-      padding: 16px 18px;
+      border-radius: 8px;
+      padding: 18px 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-block.kpi-blue {
+      border-color: #bae6fd;
+      background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%);
+    }
+
+    .kpi-block.kpi-green {
+      border-color: #bbf7d0;
+      background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+    }
+
+    .kpi-block.kpi-amber {
+      border-color: #fde68a;
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+    }
+
+    .kpi-block.kpi-red {
+      border-color: #fecaca;
+      background: linear-gradient(180deg, #fef2f2 0%, #ffffff 100%);
+    }
+
+    .kpi-header-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .kpi-icon {
+      width: 18px;
+      height: 18px;
+      stroke-width: 2;
     }
 
     .kpi-lbl {
       font-size: 0.68rem;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: 0.6px;
     }
 
     .kpi-val {
-      font-size: 1.6rem;
+      font-size: 1.55rem;
       font-weight: 800;
       letter-spacing: -0.5px;
-      color: #ffffff;
+      color: var(--text-main);
+      margin: 4px 0 2px;
     }
 
     .kpi-sub {
       font-size: 0.72rem;
-      color: var(--text-dim);
-      margin-top: 4px;
+      color: var(--text-muted);
+      font-weight: 500;
     }
 
-    /* Clean Tables */
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 5px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .badge-critical { background: var(--badge-critical-bg); border: 1px solid var(--badge-critical-border); color: var(--badge-critical-text); }
+    .badge-warning { background: var(--badge-warning-bg); border: 1px solid var(--badge-warning-border); color: var(--badge-warning-text); }
+    .badge-healthy { background: var(--badge-healthy-bg); border: 1px solid var(--badge-healthy-border); color: var(--badge-healthy-text); }
+    .badge-neutral { background: var(--badge-neutral-bg); border: 1px solid var(--badge-neutral-border); color: var(--badge-neutral-text); }
+    .badge-active { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+
+    /* Tables */
     .data-table {
       width: 100%;
       border-collapse: collapse;
@@ -320,54 +554,42 @@
     .data-table th {
       text-align: left;
       color: var(--text-muted);
-      padding: 10px 12px;
+      padding: 11px 14px;
       border-bottom: 1px solid var(--border-subtle);
+      background: #f8fafc;
       font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-weight: 600;
+      letter-spacing: 0.6px;
+      font-weight: 700;
     }
 
     .data-table td {
-      padding: 12px;
-      border-bottom: 1px solid rgba(30, 30, 36, 0.7);
-      color: var(--text-dim);
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      color: var(--text-body);
+      vertical-align: middle;
     }
 
     .data-table tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-      color: #ffffff;
+      background: #f8fafc;
+      color: var(--text-main);
     }
-
-    /* Badges */
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 0.68rem;
-      font-weight: 600;
-    }
-
-    .badge-critical { background: var(--badge-critical-bg); border: 1px solid var(--badge-critical-border); color: var(--badge-critical-text); }
-    .badge-warning { background: var(--badge-warning-bg); border: 1px solid var(--badge-warning-border); color: var(--badge-warning-text); }
-    .badge-healthy { background: var(--badge-healthy-bg); border: 1px solid var(--badge-healthy-border); color: var(--badge-healthy-text); }
-    .badge-neutral { background: #18181b; border: 1px solid var(--border-subtle); color: var(--text-dim); }
 
     /* Drop Zone */
     .drop-zone {
-      border: 1.5px dashed var(--border-strong);
-      border-radius: 8px;
+      border: 2px dashed #93c5fd;
+      border-radius: 10px;
       padding: 44px 20px;
       text-align: center;
-      background: var(--bg-body);
+      background: #f8fafc;
       cursor: pointer;
       position: relative;
-      transition: all 0.15s;
+      transition: all 0.2s ease;
     }
 
     .drop-zone:hover, .drop-zone.dragover {
-      border-color: #ffffff;
-      background: #0f0f14;
+      border-color: #2563eb;
+      background: #eff6ff;
     }
 
     .drop-zone input[type="file"] {
@@ -380,101 +602,168 @@
       cursor: pointer;
     }
 
-    /* Empty State Card */
-    .empty-state {
-      padding: 60px 20px;
-      text-align: center;
-      background: var(--bg-card);
+    .dropzone-icon-circle {
+      width: 52px;
+      height: 52px;
+      background: #dbeafe;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #1d4ed8;
+      margin-bottom: 12px;
+    }
+
+    /* Benchmark Dataset Card Grid */
+    .benchmark-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .benchmark-card {
+      background: #ffffff;
       border: 1px solid var(--border-subtle);
       border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
     }
 
-    .empty-state h3 {
-      font-size: 1.1rem;
-      margin-bottom: 6px;
-      color: #ffffff;
+    .benchmark-card:hover {
+      border-color: var(--primary-blue);
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.08);
+      transform: translateY(-1px);
     }
 
-    .empty-state p {
+    .benchmark-icon-wrap {
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .benchmark-card-title {
       font-size: 0.78rem;
-      color: var(--text-muted);
-      max-width: 480px;
-      margin: 0 auto 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    /* Pipeline Progress Box */
-    .progress-box {
-      background: #121217;
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
-      padding: 20px 24px;
-      margin-bottom: 24px;
+    .benchmark-card-sub {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      line-height: 1.35;
+    }
+
+    /* Centered Dual-Detection Evaluation Modal (Zero Layout Shift) */
+    .progress-modal-overlay {
       display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .progress-modal-card {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 680px;
+      padding: 28px 32px;
+      box-shadow: 0 20px 45px rgba(11, 26, 48, 0.22);
+      animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .countdown-val {
-      font-family: monospace;
+      font-family: ui-monospace, monospace;
       font-size: 1.8rem;
       font-weight: 800;
-      color: #ffffff;
+      color: var(--primary-navy);
+    }
+
+    /* Form Controls */
+    .form-control {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border-strong);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
     }
 
     /* Mono boxes */
     .mono-box {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       font-size: 0.76rem;
-      background: #000000;
+      background: #f8fafc;
       border: 1px solid var(--border-subtle);
       border-radius: 6px;
       padding: 14px;
-      color: #e4e4e7;
+      color: #1e293b;
       line-height: 1.6;
       white-space: pre-wrap;
     }
 
     /* Formatted Regulatory AI Output Box */
     .regulatory-output-box {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-size: 0.82rem;
-      background: #000000;
+      background: #ffffff;
       border: 1px solid var(--border-subtle);
       border-radius: 6px;
       padding: 18px 22px;
-      color: #e4e4e7;
+      color: var(--text-body);
       line-height: 1.65;
       height: 400px;
       max-height: 400px;
       overflow-y: scroll !important;
       overflow-x: hidden;
-      box-sizing: border-box;
       scrollbar-width: thin;
-      scrollbar-color: #52525b #09090b;
+      scrollbar-color: #cbd5e1 #f8fafc;
     }
 
-    .regulatory-output-box::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .regulatory-output-box::-webkit-scrollbar-track {
-      background: #09090b;
-      border-radius: 4px;
-    }
-
-    .regulatory-output-box::-webkit-scrollbar-thumb {
-      background: #3f3f46;
-      border-radius: 4px;
-    }
-
-    .regulatory-output-box::-webkit-scrollbar-thumb:hover {
-      background: #71717a;
-    }
+    .regulatory-output-box::-webkit-scrollbar { width: 8px; }
+    .regulatory-output-box::-webkit-scrollbar-track { background: #f8fafc; border-radius: 4px; }
+    .regulatory-output-box::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .regulatory-output-box::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
     /* Modal */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.88);
+      background: rgba(11, 26, 48, 0.65);
       backdrop-filter: blur(4px);
       z-index: 200;
       align-items: center;
@@ -483,14 +772,15 @@
     }
 
     .modal-box {
-      background: #0b0b0e;
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
       width: 100%;
       max-width: 860px;
       max-height: 90vh;
       overflow-y: auto;
       padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     .screen-view { display: none; }
@@ -499,65 +789,85 @@
 </head>
 <body>
 
-  <!-- LEFT VERTICAL SIDEBAR -->
+  <!-- LEFT VERTICAL SIDEBAR (DEEP NAVY #0B1A30) -->
   <aside>
+    <!-- Brand & Crisp White State Emblem of India -->
     <div class="sidebar-brand">
-      <div class="emblem">N</div>
+      <img src="assets/emblem_india.svg" alt="State Emblem of India" class="emblem-img">
       <div>
         <div class="brand-title">SAT-SA</div>
-        <div class="brand-sub">NCIIPC Supervisory Tool</div>
+        <div class="brand-sub">NCIIPC SUPERVISORY TOOL</div>
       </div>
     </div>
 
-    <!-- Active System Indicators -->
+    <!-- Active System Indicators on Dark Navy -->
     <div class="sidebar-status-group">
       <div class="status-pill">
         <span class="dot live" id="sidebarOllamaDot"></span>
-        <span id="sidebarOllamaText">Checking Ollama...</span>
+        <span id="sidebarOllamaText">Ollama: qwen2.5:3b</span>
       </div>
-      <div class="status-pill">
-        <span class="dot ready"></span>
+      <div class="status-pill air-gap">
+        <span class="dot airgap-dot"></span>
         <span>100% AIR-GAPPED OFFLINE</span>
       </div>
     </div>
 
-    <!-- Vertical Workflow Navigation -->
+    <!-- Vertical Workflow Navigation Menu -->
     <nav class="nav-menu">
       <button class="nav-item active" id="menu-upload" onclick="switchScreen('screen-upload')">
-        <span>01. Ingestion & Upload</span>
+        <div class="nav-item-left">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>01. Ingestion & Upload</span>
+        </div>
         <span class="nav-tag" id="tag-upload">Active</span>
       </button>
 
       <button class="nav-item disabled" id="menu-dashboard" onclick="switchScreen('screen-dashboard')">
-        <span>02. Executive Dashboard</span>
+        <div class="nav-item-left">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>02. Executive Dashboard</span>
+        </div>
         <span class="nav-tag" id="tag-dashboard">Locked</span>
       </button>
 
       <button class="nav-item disabled" id="menu-execution" onclick="switchScreen('screen-execution')">
-        <span>03. Execution Gaps</span>
+        <div class="nav-item-left">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>03. Execution Gaps</span>
+        </div>
         <span class="nav-tag" id="tag-execution">Locked</span>
       </button>
 
       <button class="nav-item disabled" id="menu-negative" onclick="switchScreen('screen-negative')">
-        <span>04. Negative Space</span>
+        <div class="nav-item-left">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+          <span>04. Negative Space</span>
+        </div>
         <span class="nav-tag" id="tag-negative">Locked</span>
       </button>
 
       <button class="nav-item disabled" id="menu-ai" onclick="switchScreen('screen-ai')">
-        <span>05. Ollama AI Examiner</span>
+        <div class="nav-item-left">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/><path d="m4.93 4.93 1.41 1.41"/><path d="M2 12h2"/><path d="m4.93 19.07 1.41-1.41"/><path d="M12 22a2 2 0 0 1-2-2v-2a2 2 0 0 1 2-2 2 2 0 0 1 2 2v2a2 2 0 0 1-2 2z"/><path d="m19.07 19.07-1.41-1.41"/><path d="M22 12h-2"/><path d="m19.07 4.93-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg>
+          <span>05. Ollama AI Examiner</span>
+        </div>
         <span class="nav-tag" id="tag-ai">Locked</span>
       </button>
 
       <button class="nav-item disabled" id="menu-dossier" onclick="openDossierModal()">
-        <span>06. Official Dossier</span>
+        <div class="nav-item-left">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span>06. Official Dossier</span>
+        </div>
         <span class="nav-tag" id="tag-dossier">Locked</span>
       </button>
     </nav>
 
-    <!-- Bottom Unload / Reset Button -->
-    <div style="padding-top: 18px; border-top: 1px solid var(--border-subtle); margin-top: auto;">
-      <button class="btn-outline" style="width: 100%; font-size: 0.72rem; padding: 6px;" onclick="resetToInitialState()">
-        ↺ Unload / Reset State
+    <!-- Sidebar Footer with Seamless Rashtrapati Bhavan & Tiranga Blend -->
+    <div class="sidebar-footer">
+      <button class="btn-sidebar-reset" onclick="resetToInitialState()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        Upload / Reset State
       </button>
     </div>
   </aside>
@@ -565,117 +875,216 @@
   <!-- MAIN VIEWPORT -->
   <div class="content-area">
 
-    <!-- TOP REAL-TIME NOTIFICATION BANNER (Hidden until file is evaluated) -->
+    <!-- TOP REAL-TIME NOTIFICATION BANNER (Dismissible) -->
     <div class="alert-banner" id="supervisoryAlertBanner" style="display: none;">
-      <div>
-        <strong id="bannerHeading">EVALUATION COMPLETE:</strong>
-        <span id="bannerDetails" style="color: var(--text-dim); margin-left: 6px;"></span>
+      <div class="alert-banner-text">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span>
+          <strong id="bannerHeading">EVALUATION COMPLETE:</strong>
+          <span id="bannerDetails" style="margin-left: 4px;"></span>
+        </span>
       </div>
-      <button class="btn-outline" style="padding: 3px 8px; font-size: 0.7rem;" onclick="dismissBanner()">Dismiss</button>
+      <button class="btn-outline" style="padding: 4px 10px; font-size: 0.7rem;" onclick="dismissBanner()">Dismiss</button>
     </div>
 
-    <!-- COUNTDOWN / PROGRESS OVERLAY (Visible during calculation) -->
-    <div class="progress-box" id="pipelineProgressBox">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Automated Dual-Detection Assessment</span>
-          <h3 style="font-size: 1.1rem; color: #ffffff;" id="progressHeadline">Analyzing Ingested Batch Telemetry...</h3>
+    <!-- DUAL-DETECTION EVALUATION MODAL (Centered, Zero Layout Shift) -->
+    <div class="progress-modal-overlay" id="pipelineProgressBox">
+      <div class="progress-modal-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 12px;">
+          <div>
+            <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.8px;">Section 70A Dual-Detection Engine</span>
+            <h3 style="font-size: 1.18rem; color: var(--text-main); margin-top: 2px;" class="editorial-heading" id="progressHeadline">Analyzing Ingested Batch Telemetry...</h3>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.65rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.5px;">ESTIMATED COMPLETION</div>
+            <div class="countdown-val" id="countdownVal">02.4s</div>
+          </div>
         </div>
-        <div style="text-align: right;">
-          <div style="font-size: 0.68rem; color: var(--text-muted);">ESTIMATED COMPLETION</div>
-          <div class="countdown-val" id="countdownVal">04.8s</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px;">
+          <div class="kpi-block" style="padding: 12px 10px; text-align: center; border-radius: 8px;" id="pipeStep1">
+            <strong style="font-size: 0.78rem;">1. Schema Normalizer</strong><br>
+            <span style="font-size: 0.68rem; color: var(--text-muted);">Parsing CSV/JSON</span>
+          </div>
+          <div class="kpi-block" style="padding: 12px 10px; text-align: center; border-radius: 8px;" id="pipeStep2">
+            <strong style="font-size: 0.78rem;">2. Velocity Engine</strong><br>
+            <span style="font-size: 0.68rem; color: var(--text-muted);">Z-Score Speed Anomaly</span>
+          </div>
+          <div class="kpi-block" style="padding: 12px 10px; text-align: center; border-radius: 8px;" id="pipeStep3">
+            <strong style="font-size: 0.78rem;">3. Silence Hunter</strong><br>
+            <span style="font-size: 0.68rem; color: var(--text-muted);">Poisson Negative Space</span>
+          </div>
+          <div class="kpi-block" style="padding: 12px 10px; text-align: center; border-radius: 8px;" id="pipeStep4">
+            <strong style="font-size: 0.78rem;">4. Ollama Reasoner</strong><br>
+            <span style="font-size: 0.68rem; color: var(--text-muted);">Local qwen2.5:3b</span>
+          </div>
         </div>
-      </div>
-      <div style="display: flex; gap: 8px; margin-top: 14px;">
-        <div class="kpi-block" style="flex: 1; padding: 10px;" id="pipeStep1"><strong>1. Schema Normalizer</strong><br><span style="font-size: 0.7rem; color: var(--text-muted);">Parsing CSV/JSON</span></div>
-        <div class="kpi-block" style="flex: 1; padding: 10px;" id="pipeStep2"><strong>2. Velocity Engine</strong><br><span style="font-size: 0.7rem; color: var(--text-muted);">Z-Score Speed Anomaly</span></div>
-        <div class="kpi-block" style="flex: 1; padding: 10px;" id="pipeStep3"><strong>3. Silence Hunter</strong><br><span style="font-size: 0.7rem; color: var(--text-muted);">Poisson Negative Space</span></div>
-        <div class="kpi-block" style="flex: 1; padding: 10px;" id="pipeStep4"><strong>4. Ollama Reasoner</strong><br><span style="font-size: 0.7rem; color: var(--text-muted);">Local qwen2.5:3b</span></div>
       </div>
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCREEN 1: INGESTION & UPLOAD (DEFAULT ACTIVE ON CLEAN START)   -->
+    <!-- SCREEN 1: INGESTION CONSOLE                                   -->
     <!-- ============================================================== -->
     <div id="screen-upload" class="screen-view active">
       <div class="top-toolbar">
-        <div class="page-title">
-          <h2>01. Ingestion Console</h2>
-          <p>Awaiting submission dump. Upload CSV/JSON files or folders to initiate supervisory assessment.</p>
+        <div class="page-title-wrap">
+          <div class="page-title-icon-tile">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="page-title">
+            <h2>01. Ingestion Console</h2>
+            <p>Awaiting submission dump. Upload CSV/JSON files or folders to initiate supervisory assessment.</p>
+          </div>
         </div>
-        <span class="badge badge-neutral" id="statusBadgeTop">Awaiting Batch Input</span>
+        <span class="badge-awaiting" id="statusBadgeTop">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Awaiting Batch Input
+        </span>
       </div>
 
       <div class="panel">
         <div class="panel-head">
-          <div>
-            <h3 style="font-size: 1rem; color: #ffffff;">Batch Telemetry Ingestion</h3>
-            <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
-              Operates 100% offline. Calculates cryptographic SHA-256 custody hash upon ingestion.
-            </p>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="width: 38px; height: 38px; background: #e0f2fe; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #0284c7;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+            </div>
+            <div>
+              <h3 style="font-size: 1.05rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Batch Telemetry Ingestion</h3>
+              <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                Operates 100% offline. Calculates cryptographic SHA-256 custody hash upon ingestion.
+              </p>
+            </div>
           </div>
-          <span class="badge badge-neutral">Section 2 Compliant (Metadata Only)</span>
+          <span class="badge badge-active">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Section 2 Compliant (Metadata Only)
+          </span>
         </div>
 
-        <!-- Entity & Category Selection -->
+        <!-- Entity & Category Selection Row -->
         <div class="grid-2col" style="margin-bottom: 20px;">
           <div>
-            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Target Critical Sector Entity (CSE):</label>
-            <select id="selectTargetEntity" style="width: 100%; background: #000; border: 1px solid var(--border-subtle); color: #fff; padding: 10px; border-radius: 6px; font-size: 0.78rem;">
+            <label style="font-size: 0.74rem; color: var(--text-body); font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>
+              Target Critical Sector Entity (CSE):
+            </label>
+            <select id="selectTargetEntity" class="form-control">
               <option value="powergrid">National Power Grid Corp (PGCIL) [Power & SCADA]</option>
               <option value="sbi">State Bank of India (SBI) [Banking / BFSI]</option>
-              <option value="dmrc">Delhi Metro Rail Corp (DMRC) [Transport]</option>
+              <option value="dmrc">Delhi Metro Rail Corp (DMRC) [Transport / Rail]</option>
               <option value="drdo">Defence Research & Development (DRDO) [Strategic / Defence]</option>
             </select>
           </div>
 
           <div>
-            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Submission Category (Problem Statement Section 2):</label>
-            <select style="width: 100%; background: #000; border: 1px solid var(--border-subtle); color: #fff; padding: 10px; border-radius: 6px; font-size: 0.78rem;">
+            <label style="font-size: 0.74rem; color: var(--text-body); font-weight: 600; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Submission Category (Problem Statement Section 2):
+            </label>
+            <select class="form-control">
               <option>(i) Alert Metadata & Investigation Records</option>
-              <option>(ii) Case Management Tickets</option>
-              <option>(iii) Senior Escalation Records</option>
-              <option>(iv) Critical Asset Inventory Dumps</option>
+              <option>(ii) Case Management Records & Tickets</option>
+              <option>(iii) Investigation Workflow & Escalation Records</option>
+              <option>(iv) Alert Disposition & Closure Information</option>
+              <option>(v) Critical Asset & System Inventory Information</option>
             </select>
           </div>
         </div>
 
-        <!-- Drop Box -->
+        <!-- Drag & Drop Zone -->
         <div class="drop-zone" id="dropArea">
           <input type="file" id="fileUploadInput" accept=".csv,.json" multiple onchange="handleFileInput(event)">
-          <div style="font-size: 2.2rem; margin-bottom: 8px;">📂</div>
-          <h3 style="font-size: 1rem; color: #ffffff;">Drag & Drop Any CSV or JSON Submission Dump Here</h3>
+          <div class="dropzone-icon-circle">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <h3 style="font-size: 1.1rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Drag & Drop Any CSV or JSON Submission Dump Here</h3>
           <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 4px;">
-            Or click to browse from <code>data/large_datasets/</code> on your computer.
+            Or click to browse from <code>data/large_datasets/</code> on your computer. Supports Alert CSVs, Case Ticket JSONs, and complete directories.
           </p>
-          <div style="margin-top: 8px; font-size: 0.7rem; color: var(--text-dim);">
-            Supports Alert CSVs, Case Ticket JSONs, and complete directories
+          <div style="margin-top: 16px;">
+            <button class="btn-navy" type="button">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+              Browse Files
+            </button>
           </div>
         </div>
 
-        <!-- Pre-loaded Large Benchmark Datasets (For instant testing) -->
+        <!-- Pre-generated Benchmark Datasets Grid -->
         <div style="margin-top: 24px;">
-          <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
-            Or Load Pre-Generated Benchmark Datasets (100–150 rows):
+          <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.6px; margin-bottom: 10px;">
+            OR LOAD PRE-GENERATED BENCHMARK DATASETS (100–150 ROWS):
           </div>
-          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-            <button class="btn-outline" onclick="loadPreparedDataset('powergrid')">⚡ Power Grid (150 Alerts CSV - SLA Gaming)</button>
-            <button class="btn-outline" onclick="loadPreparedDataset('sbi')">🏦 State Bank of India (140 Alerts CSV - Silent Core DBs)</button>
-            <button class="btn-outline" onclick="loadPreparedDataset('dmrc')">🚆 Delhi Metro (120 Alerts JSON - MITRE Void)</button>
-            <button class="btn-outline" onclick="loadPreparedDataset('drdo')">🛡️ Defence DRDO (100 Alerts JSON - Forensic Benchmark)</button>
+          <div class="benchmark-grid">
+            <!-- 1. Power Grid -->
+            <div class="benchmark-card" onclick="loadPreparedDataset('powergrid')">
+              <div class="benchmark-icon-wrap" style="background: #fffbeb; color: #d97706;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div class="benchmark-card-title">
+                  <span>Power Grid (150 Alerts CSV - SLA Gaming)</span>
+                  <span style="color: var(--text-dim);">&gt;</span>
+                </div>
+                <div class="benchmark-card-sub">Benchmark dataset for Power & SCADA alerts.</div>
+              </div>
+            </div>
+
+            <!-- 2. SBI -->
+            <div class="benchmark-card" onclick="loadPreparedDataset('sbi')">
+              <div class="benchmark-icon-wrap" style="background: #eff6ff; color: #2563eb;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/><line x1="8" y1="14" x2="8" y2="17"/><line x1="12" y1="14" x2="12" y2="17"/><line x1="16" y1="14" x2="16" y2="17"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div class="benchmark-card-title">
+                  <span>State Bank of India (54 Alerts CSV - 26 Assets Multi-Engine)</span>
+                  <span style="color: var(--text-dim);">&gt;</span>
+                </div>
+                <div class="benchmark-card-sub">Realistic banking dataset with SLA gaming &amp; 3 silent Tier-1 DB/SWIFT nodes.</div>
+              </div>
+            </div>
+
+            <!-- 3. Delhi Metro -->
+            <div class="benchmark-card" onclick="loadPreparedDataset('dmrc')">
+              <div class="benchmark-icon-wrap" style="background: #f0fdf4; color: #16a34a;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="3" width="16" height="16" rx="2"/><path d="M4 11h16"/><path d="M12 3v8"/><path d="m8 19-2 3"/><path d="m18 22-2-3"/><circle cx="8" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div class="benchmark-card-title">
+                  <span>Delhi Metro (120 Alerts JSON - MITRE Void)</span>
+                  <span style="color: var(--text-dim);">&gt;</span>
+                </div>
+                <div class="benchmark-card-sub">Benchmark dataset for metro operational alerts.</div>
+              </div>
+            </div>
+
+            <!-- 4. DRDO -->
+            <div class="benchmark-card" onclick="loadPreparedDataset('drdo')">
+              <div class="benchmark-icon-wrap" style="background: #eef2ff; color: #4f46e5;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div class="benchmark-card-title">
+                  <span>Defence DRDO (100 Alerts JSON - Forensic Benchmark)</span>
+                  <span style="color: var(--text-dim);">&gt;</span>
+                </div>
+                <div class="benchmark-card-sub">Benchmark dataset for forensic analysis.</div>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Ingested File Details Card -->
-        <div id="ingestedMetaCard" style="display: none; margin-top: 20px; background: #000; border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px;">
+        <div id="ingestedMetaCard" style="display: none; margin-top: 20px; background: #f8fafc; border: 1px solid var(--border-subtle); border-radius: 6px; padding: 14px 18px;">
           <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-              <strong style="color: #ffffff;" id="ingestedFileName">file.csv</strong>
+              <strong style="color: var(--text-main);" id="ingestedFileName">file.csv</strong>
               <div style="font-size: 0.72rem; color: var(--text-muted);" id="ingestedFileStats">0 rows | 0 KB</div>
             </div>
             <div style="text-align: right;">
-              <span class="badge badge-healthy">SHA-256 VERIFIED</span>
-              <div style="font-size: 0.66rem; font-family: monospace; color: var(--text-dim); margin-top: 2px;" id="ingestedFileHash"></div>
+              <span class="badge badge-healthy">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                SHA-256 VERIFIED
+              </span>
+              <div style="font-size: 0.68rem; font-family: ui-monospace, monospace; color: var(--text-body); margin-top: 3px;" id="ingestedFileHash"></div>
             </div>
           </div>
         </div>
@@ -683,7 +1092,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCREEN 2: EXECUTIVE DASHBOARD (UNLOCKED AFTER UPLOAD)          -->
+    <!-- SCREEN 2: EXECUTIVE SUPERVISORY DASHBOARD                      -->
     <!-- ============================================================== -->
     <div id="screen-dashboard" class="screen-view">
       <div class="top-toolbar">
@@ -691,119 +1100,168 @@
           <h2>02. Executive Supervisory Dashboard</h2>
           <p>Macro assessment metrics and visual keys derived from ingested batch telemetry.</p>
         </div>
-        <button class="btn-white" onclick="openDossierModal()">Generate Audit Dossier</button>
+        <button class="btn-navy" onclick="openDossierModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Generate Audit Dossier
+        </button>
       </div>
 
-      <!-- Real-Time Metrics Row -->
-      <div class="grid-4col" style="margin-bottom: 24px;">
-        <div class="kpi-block">
-          <div class="kpi-lbl">Target Critical Entity</div>
-          <div class="kpi-val" style="font-size: 1.25rem;" id="dashEntityName">-</div>
+      <!-- Real-Time Metrics Row (4 Cards) -->
+      <div class="grid-4col" style="margin-bottom: 22px;">
+        <!-- Card 1: Target Critical Entity -->
+        <div class="kpi-block kpi-blue">
+          <div>
+            <div class="kpi-header-row">
+              <svg class="kpi-icon" style="color: #0284c7;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="3" y1="21" x2="21" y2="21"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="5 6 12 3 19 6"/><line x1="4" y1="10" x2="4" y2="21"/><line x1="20" y1="10" x2="20" y2="21"/></svg>
+              <div class="kpi-lbl">TARGET CRITICAL ENTITY</div>
+            </div>
+            <div class="kpi-val" style="font-size: 1.25rem;" id="dashEntityName">-</div>
+          </div>
           <div class="kpi-sub" id="dashEntitySector">-</div>
         </div>
 
-        <div class="kpi-block">
-          <div class="kpi-lbl">Total Alerts Assessed</div>
-          <div class="kpi-val" id="dashAlertCount">0</div>
+        <!-- Card 2: Total Alerts Assessed -->
+        <div class="kpi-block kpi-green">
+          <div>
+            <div class="kpi-header-row">
+              <svg class="kpi-icon" style="color: #16a34a;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <div class="kpi-lbl">TOTAL ALERTS ASSESSED</div>
+            </div>
+            <div class="kpi-val" id="dashAlertCount">0 Alerts Evaluated</div>
+          </div>
           <div class="kpi-sub">Columnar In-Memory Processing</div>
         </div>
 
-        <div class="kpi-block">
-          <div class="kpi-lbl">Execution Gap Index</div>
-          <div class="kpi-val" id="dashGapIndex">-</div>
+        <!-- Card 3: Execution Gap Index -->
+        <div class="kpi-block kpi-amber">
+          <div>
+            <div class="kpi-header-row">
+              <svg class="kpi-icon" style="color: #d97706;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <div class="kpi-lbl">EXECUTION GAP INDEX</div>
+            </div>
+            <div class="kpi-val" style="color: #b45309;" id="dashGapIndex">-</div>
+          </div>
           <div class="kpi-sub" id="dashGapSub">-</div>
         </div>
 
-        <div class="kpi-block">
-          <div class="kpi-lbl">Resilience Index (ECRI)</div>
-          <div class="kpi-val" id="dashECRIVal">-</div>
+        <!-- Card 4: Resilience Index (ECRI) -->
+        <div class="kpi-block kpi-red">
+          <div>
+            <div class="kpi-header-row">
+              <svg class="kpi-icon" style="color: #dc2626;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div class="kpi-lbl">RESILIENCE INDEX (ECRI)</div>
+            </div>
+            <div class="kpi-val" style="color: #b91c1c;" id="dashECRIVal">-</div>
+          </div>
           <div class="kpi-sub" id="dashVerdictText">-</div>
         </div>
       </div>
 
-      <!-- VISUAL KEYS & CHARTS ROW -->
-      <div class="grid-2col" style="margin-bottom: 24px;">
-        <!-- Visual Key 1: Triage Velocity Histogram -->
+      <!-- Visual Keys Row -->
+      <div class="grid-2col" style="margin-bottom: 22px;">
+        <!-- Visual Key 1: Triage Velocity Distribution -->
         <div class="panel">
           <div class="panel-head">
-            <div>
-              <h4 style="font-size: 0.88rem; color: #ffffff;">Visual Key: Triage Velocity Distribution (SLA Speed Gaming)</h4>
-              <p style="font-size: 0.7rem; color: var(--text-muted);">Tall red bar indicates unnatural &lt;60s closures</p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              <div>
+                <h4 style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Visual Key: Triage Velocity Distribution (SLA Speed Gaming)</h4>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Tall red bar indicates unnatural &lt;60s closures</p>
+              </div>
             </div>
           </div>
 
-          <svg width="100%" height="150" viewBox="0 0 500 150" style="overflow: visible;">
-            <line x1="40" y1="120" x2="480" y2="120" stroke="#222226" stroke-width="1" />
+          <!-- Clean Precision SVG Histogram -->
+          <svg width="100%" height="160" viewBox="0 0 500 160" style="overflow: visible;">
+            <!-- Grid Lines -->
+            <line x1="40" y1="20" x2="480" y2="20" stroke="#f1f5f9" stroke-width="1" />
+            <line x1="40" y1="50" x2="480" y2="50" stroke="#f1f5f9" stroke-width="1" />
+            <line x1="40" y1="80" x2="480" y2="80" stroke="#f1f5f9" stroke-width="1" />
+            <line x1="40" y1="120" x2="480" y2="120" stroke="#cbd5e1" stroke-width="1.5" />
             
-            <rect id="svgFast" x="65" y="40" width="75" height="80" fill="#ef4444" rx="2" />
-            <text id="svgFastVal" x="102" y="32" fill="#ffffff" font-size="11" font-weight="700" text-anchor="middle">83%</text>
-            <text x="102" y="136" fill="#71717a" font-size="10" text-anchor="middle">&lt; 60 Seconds</text>
+            <!-- Y-Axis Labels -->
+            <text x="32" y="24" fill="#94a3b8" font-size="9" text-anchor="end">20</text>
+            <text x="32" y="54" fill="#94a3b8" font-size="9" text-anchor="end">15</text>
+            <text x="32" y="84" fill="#94a3b8" font-size="9" text-anchor="end">10</text>
+            <text x="32" y="114" fill="#94a3b8" font-size="9" text-anchor="end">5</text>
+            <text x="32" y="124" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
 
-            <rect id="svgMed" x="175" y="100" width="75" height="20" fill="#3f3f46" rx="2" />
-            <text id="svgMedVal" x="212" y="92" fill="#ffffff" font-size="11" text-anchor="middle">10%</text>
-            <text x="212" y="136" fill="#71717a" font-size="10" text-anchor="middle">1 - 15 Mins</text>
+            <!-- Bar 1: < 60 Seconds -->
+            <rect id="svgFast" x="65" y="40" width="75" height="80" fill="#ef4444" rx="3" />
+            <text id="svgFastVal" x="102" y="32" fill="#0f172a" font-size="11" font-weight="700" text-anchor="middle">83%</text>
+            <text x="102" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">&lt; 60 Seconds</text>
 
-            <rect id="svgNorm" x="285" y="110" width="75" height="10" fill="#3f3f46" rx="2" />
-            <text id="svgNormVal" x="322" y="102" fill="#ffffff" font-size="11" text-anchor="middle">5%</text>
-            <text x="322" y="136" fill="#71717a" font-size="10" text-anchor="middle">15 - 45 Mins</text>
+            <!-- Bar 2: 1 - 15 Mins -->
+            <rect id="svgMed" x="175" y="100" width="75" height="20" fill="#94a3b8" rx="3" />
+            <text id="svgMedVal" x="212" y="92" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">10%</text>
+            <text x="212" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">1 – 15 Mins</text>
 
-            <rect id="svgDeep" x="395" y="115" width="75" height="5" fill="#10b981" rx="2" />
-            <text id="svgDeepVal" x="432" y="107" fill="#ffffff" font-size="11" text-anchor="middle">2%</text>
-            <text x="432" y="136" fill="#71717a" font-size="10" text-anchor="middle">&gt; 45 Mins</text>
+            <!-- Bar 3: 15 - 45 Mins -->
+            <rect id="svgNorm" x="285" y="110" width="75" height="10" fill="#94a3b8" rx="3" />
+            <text id="svgNormVal" x="322" y="102" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">5%</text>
+            <text x="322" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">15 – 45 Mins</text>
+
+            <!-- Bar 4: > 45 Mins -->
+            <rect id="svgDeep" x="395" y="115" width="75" height="5" fill="#10b981" rx="3" />
+            <text id="svgDeepVal" x="432" y="107" fill="#0f172a" font-size="11" font-weight="600" text-anchor="middle">2%</text>
+            <text x="432" y="138" fill="#64748b" font-size="10" font-weight="600" text-anchor="middle">&gt; 45 Mins</text>
           </svg>
         </div>
 
-        <!-- Visual Key 2: Operational Assurance Deficit Breakdown (Specific to Uploaded Entity) -->
+        <!-- Visual Key 2: Operational Assurance Deficit Breakdown -->
         <div class="panel">
           <div class="panel-head">
-            <div>
-              <h4 style="font-size: 0.88rem; color: #ffffff;">Visual Key: Operational Assurance Deficit Breakdown</h4>
-              <p style="font-size: 0.7rem; color: var(--text-muted);">Computed specifically for <strong id="dashEntityNameSub" style="color: #ffffff;">-</strong></p>
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div>
+                <h4 style="font-size: 0.9rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Visual Key: Operational Assurance Deficit Breakdown</h4>
+                <p style="font-size: 0.72rem; color: var(--text-muted);">Computed specifically for <strong id="dashEntityNameSub" style="color: var(--text-main);">-</strong></p>
+              </div>
             </div>
           </div>
 
-          <div style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 4px;">
             <!-- Gauge 1: Triage Velocity Rigour -->
             <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px;">
-                <span>Triage Velocity Rigour (Non-Gaming)</span>
-                <span id="meterVelocityVal" style="font-weight: 700; color: #ef4444;">17% (83% Gaming)</span>
+              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                <span style="color: var(--text-body);">Triage Velocity Rigour (Non-Gaming)</span>
+                <span id="meterVelocityVal" style="font-weight: 700; color: #ef4444;">17% Rigour (83% Gaming)</span>
               </div>
-              <div style="height: 6px; background: #1e1e24; border-radius: 3px; overflow: hidden;">
-                <div id="meterVelocityBar" style="height: 100%; width: 17%; background: #ef4444;"></div>
+              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                <div id="meterVelocityBar" style="height: 100%; width: 17%; background: #ef4444; border-radius: 4px; transition: width 0.3s ease;"></div>
               </div>
             </div>
 
             <!-- Gauge 2: Investigation Note Uniqueness -->
             <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px;">
-                <span>Investigation Note Uniqueness (Shannon Entropy)</span>
-                <span id="meterTemplateVal" style="font-weight: 700; color: #ef4444;">12% (88% Clones)</span>
+              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                <span style="color: var(--text-body);">Investigation Note Uniqueness (Shannon Entropy)</span>
+                <span id="meterTemplateVal" style="font-weight: 700; color: #10b981;">92% Unique (8% Clones)</span>
               </div>
-              <div style="height: 6px; background: #1e1e24; border-radius: 3px; overflow: hidden;">
-                <div id="meterTemplateBar" style="height: 100%; width: 12%; background: #ef4444;"></div>
-              </div>
-            </div>
-
-            <!-- Gauge 3: Senior Escalation Compliance -->
-            <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px;">
-                <span>Senior Escalation Hierarchy Adherence</span>
-                <span id="meterEscalateVal" style="font-weight: 700; color: #f59e0b;">0% (100% Bypassed)</span>
-              </div>
-              <div style="height: 6px; background: #1e1e24; border-radius: 3px; overflow: hidden;">
-                <div id="meterEscalateBar" style="height: 100%; width: 0%; background: #ef4444;"></div>
+              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                <div id="meterTemplateBar" style="height: 100%; width: 92%; background: #10b981; border-radius: 4px; transition: width 0.3s ease;"></div>
               </div>
             </div>
 
-            <!-- Gauge 4: Critical Telemetry Coverage -->
+            <!-- Gauge 3: Senior Escalation Adherence -->
             <div>
-              <div style="display: flex; justify-content: space-between; font-size: 0.72rem; margin-bottom: 4px;">
-                <span>Asset Telemetry Coverage (Negative Space)</span>
-                <span id="meterCoverageVal" style="font-weight: 700; color: #f59e0b;">56% (Blindspots Detected)</span>
+              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                <span style="color: var(--text-body);">Senior Escalation Hierarchy Adherence</span>
+                <span id="meterEscalateVal" style="font-weight: 700; color: #d97706;">80% Bypassed</span>
               </div>
-              <div style="height: 6px; background: #1e1e24; border-radius: 3px; overflow: hidden;">
-                <div id="meterCoverageBar" style="height: 100%; width: 56%; background: #f59e0b;"></div>
+              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                <div id="meterEscalateBar" style="height: 100%; width: 80%; background: #f59e0b; border-radius: 4px; transition: width 0.3s ease;"></div>
+              </div>
+            </div>
+
+            <!-- Gauge 4: Asset Telemetry Coverage -->
+            <div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 600; margin-bottom: 5px;">
+                <span style="color: var(--text-body);">Asset Telemetry Coverage (Negative Space)</span>
+                <span id="meterCoverageVal" style="font-weight: 700; color: #d97706;">4 Silent Nodes Detected</span>
+              </div>
+              <div style="height: 7px; background: #f1f5f9; border-radius: 4px; overflow: hidden; border: 1px solid var(--border-subtle);">
+                <div id="meterCoverageBar" style="height: 100%; width: 56%; background: #f59e0b; border-radius: 4px; transition: width 0.3s ease;"></div>
               </div>
             </div>
           </div>
@@ -812,7 +1270,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCREEN 3: EXECUTION GAPS (UNLOCKED AFTER UPLOAD)              -->
+    <!-- SCREEN 3: EXECUTION GAPS ENGINE                                -->
     <!-- ============================================================== -->
     <div id="screen-execution" class="screen-view">
       <div class="top-toolbar">
@@ -820,23 +1278,26 @@
           <h2>03. Execution Gaps Engine</h2>
           <p>Unrealistic triage velocities, boilerplate copy-paste template remarks, and escalation breaks.</p>
         </div>
-        <span class="badge badge-critical" id="egOverallBadge">Execution Deficiencies Flagged</span>
+        <span class="badge badge-critical" id="egOverallBadge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Execution Deficiencies Flagged
+        </span>
       </div>
 
-      <div class="grid-3col" style="margin-bottom: 24px;">
-        <div class="kpi-block">
+      <div class="grid-3col" style="margin-bottom: 22px;">
+        <div class="kpi-block kpi-red">
           <div class="kpi-lbl">Speed Metric Gaming (&lt;60s)</div>
-          <div class="kpi-val" style="color: #ef4444;" id="egSpeedCardVal">83%</div>
+          <div class="kpi-val" style="color: #b91c1c;" id="egSpeedCardVal">83%</div>
           <div class="kpi-sub">Closed faster than realistic forensic threshold</div>
         </div>
-        <div class="kpi-block">
+        <div class="kpi-block kpi-red">
           <div class="kpi-lbl">Template Clone Similarity</div>
-          <div class="kpi-val" style="color: #ef4444;" id="egTemplateCardVal">98.4%</div>
+          <div class="kpi-val" style="color: #b91c1c;" id="egTemplateCardVal">98.4%</div>
           <div class="kpi-sub">Exact semantic clone notes across multiple analysts</div>
         </div>
-        <div class="kpi-block">
+        <div class="kpi-block kpi-red">
           <div class="kpi-lbl">Senior Escalation Bypass</div>
-          <div class="kpi-val" style="color: #ef4444;" id="egEscalateCardVal">100%</div>
+          <div class="kpi-val" style="color: #b91c1c;" id="egEscalateCardVal">100%</div>
           <div class="kpi-sub">Critical incidents closed at entry-level L1</div>
         </div>
       </div>
@@ -844,8 +1305,8 @@
       <div class="panel">
         <div class="panel-head">
           <div>
-            <h4 style="font-size: 0.9rem; color: #ffffff;">Flagged Incident Tickets Requiring Supervisory Inquiry</h4>
-            <p style="font-size: 0.72rem; color: var(--text-muted);">Extracted directly from the ingested submission</p>
+            <h4 style="font-size: 0.95rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Flagged Incident Tickets Requiring Supervisory Inquiry</h4>
+            <p style="font-size: 0.72rem; color: var(--text-muted);">Extracted directly from the ingested submission batch</p>
           </div>
         </div>
 
@@ -869,7 +1330,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCREEN 4: NEGATIVE SPACE (UNLOCKED AFTER UPLOAD)              -->
+    <!-- SCREEN 4: NEGATIVE SPACE HUNTER                                -->
     <!-- ============================================================== -->
     <div id="screen-negative" class="screen-view">
       <div class="top-toolbar">
@@ -877,38 +1338,68 @@
           <h2>04. Negative Space Hunter</h2>
           <p>Detecting missing telemetry, silent critical infrastructure, and MITRE kill-chain voids.</p>
         </div>
-        <span class="badge badge-warning" id="nsOverallBadge">Blindspots Detected</span>
+        <span class="badge badge-warning" id="nsOverallBadge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Blindspots Detected
+        </span>
       </div>
 
       <!-- MITRE Kill-Chain Heatmap -->
-      <div class="panel" style="margin-bottom: 24px;">
+      <div class="panel" style="margin-bottom: 22px;">
         <div class="panel-head">
-          <div>
-            <h4 style="font-size: 0.9rem; color: #ffffff;">MITRE ATT&CK Kill-Chain Coverage Heatmap</h4>
-            <p style="font-size: 0.72rem; color: var(--text-muted);">Red dashed boxes indicate internal network telemetry voids</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+            <div>
+              <h4 style="font-size: 0.95rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">MITRE ATT&CK Kill-Chain Coverage Heatmap</h4>
+              <p style="font-size: 0.72rem; color: var(--text-muted);">Red dashed boxes indicate internal network telemetry voids</p>
+            </div>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;">
-          <div class="kpi-block" style="border-color: #10b981; padding: 12px; text-align: center;">
-            <span style="font-size: 0.68rem; color: var(--text-muted);">Initial Access</span><br>
-            <strong style="color: #10b981; font-size: 0.85rem;" id="nsMitreAccess">4,120 Alerts</strong>
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+          <!-- 1. Initial Access -->
+          <div class="kpi-block" style="border-color: #86efac; background: #f0fdf4; padding: 14px; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="m18 18 4 4"/><path d="m9 15 2 2"/></svg>
+              <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Initial Access</span>
+            </div>
+            <strong style="color: #15803d; font-size: 0.95rem; font-weight: 800;" id="nsMitreAccess">8 Alerts</strong>
           </div>
-          <div class="kpi-block" style="border-color: #10b981; padding: 12px; text-align: center;">
-            <span style="font-size: 0.68rem; color: var(--text-muted);">Execution</span><br>
-            <strong style="color: #10b981; font-size: 0.85rem;" id="nsMitreExec">1,890 Alerts</strong>
+
+          <!-- 2. Execution -->
+          <div class="kpi-block" style="border-color: #86efac; background: #f0fdf4; padding: 14px; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Execution</span>
+            </div>
+            <strong style="color: #15803d; font-size: 0.95rem; font-weight: 800;" id="nsMitreExec">4 Alerts</strong>
           </div>
-          <div class="kpi-block" style="border-color: #10b981; padding: 12px; text-align: center;">
-            <span style="font-size: 0.68rem; color: var(--text-muted);">Persistence</span><br>
-            <strong style="color: #10b981; font-size: 0.85rem;" id="nsMitrePersist">650 Alerts</strong>
+
+          <!-- 3. Persistence -->
+          <div class="kpi-block" style="border-color: #86efac; background: #f0fdf4; padding: 14px; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Persistence</span>
+            </div>
+            <strong style="color: #15803d; font-size: 0.95rem; font-weight: 800;" id="nsMitrePersist">1 Alerts</strong>
           </div>
-          <div class="kpi-block" id="nsCardCred" style="border: 1.5px dashed #ef4444; background: #271415; padding: 12px; text-align: center;">
-            <span style="font-size: 0.68rem; color: #fca5a5;">Credential Access</span><br>
-            <strong style="color: #ef4444; font-size: 0.85rem;" id="nsCredStatus">0 ALERTS (VOID)</strong>
+
+          <!-- 4. Credential Access (Void Highlight) -->
+          <div class="kpi-block" id="nsCardCred" style="border: 2px dashed #ef4444; background: #fef2f2; padding: 14px; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span style="font-size: 0.7rem; color: #b91c1c; font-weight: 600;">Credential Access</span>
+            </div>
+            <strong style="color: #b91c1c; font-size: 0.95rem; font-weight: 800;" id="nsCredStatus">0 ALERTS (VOID)</strong>
           </div>
-          <div class="kpi-block" id="nsCardLateral" style="border: 1.5px dashed #ef4444; background: #271415; padding: 12px; text-align: center;">
-            <span style="font-size: 0.68rem; color: #fca5a5;">Lateral Movement</span><br>
-            <strong style="color: #ef4444; font-size: 0.85rem;" id="nsLateralStatus">0 ALERTS (VOID)</strong>
+
+          <!-- 5. Lateral Movement (Void Highlight) -->
+          <div class="kpi-block" id="nsCardLateral" style="border: 2px dashed #ef4444; background: #fef2f2; padding: 14px; text-align: center;">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/></svg>
+              <span style="font-size: 0.7rem; color: #b91c1c; font-weight: 600;">Lateral Movement</span>
+            </div>
+            <strong style="color: #b91c1c; font-size: 0.95rem; font-weight: 800;" id="nsLateralStatus">0 ALERTS (VOID)</strong>
           </div>
         </div>
       </div>
@@ -916,9 +1407,12 @@
       <!-- Silent Assets Table -->
       <div class="panel">
         <div class="panel-head">
-          <div>
-            <h4 style="font-size: 0.9rem; color: #ffffff;">Detected Silent Critical Infrastructure Nodes</h4>
-            <p style="font-size: 0.72rem; color: var(--text-muted);">Registered in asset inventory but generated ZERO alerts over 90 days</p>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4f46e5" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            <div>
+              <h4 style="font-size: 0.95rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Detected Silent Critical Infrastructure Nodes</h4>
+              <p style="font-size: 0.72rem; color: var(--text-muted);">Registered in asset inventory but generated ZERO alerts over 90 days</p>
+            </div>
           </div>
         </div>
 
@@ -942,7 +1436,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCREEN 5: OLLAMA AI EXAMINER (UNLOCKED AFTER UPLOAD)           -->
+    <!-- SCREEN 5: OLLAMA AI EXAMINER                                   -->
     <!-- ============================================================== -->
     <div id="screen-ai" class="screen-view">
       <div class="top-toolbar">
@@ -950,43 +1444,49 @@
           <h2>05. Local Ollama AI Examiner</h2>
           <p>Air-gapped regulatory reasoner running directly on your machine via <code>qwen2.5:3b</code>.</p>
         </div>
-        <span class="badge badge-healthy" id="aiModelBadgeTop">Ollama Daemon Ready</span>
+        <span class="badge badge-healthy" id="aiModelBadgeTop">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Ollama Daemon Ready
+        </span>
       </div>
 
       <div class="grid-2col">
+        <!-- Input Panel -->
         <div class="panel">
           <div class="panel-head">
-            <h4 style="font-size: 0.9rem; color: #ffffff;">Operational Evidence Input</h4>
+            <h4 style="font-size: 0.95rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Operational Evidence Input</h4>
           </div>
 
-          <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Select Case to Reason Upon:</label>
-          <select id="selectAICase" onchange="renderActiveCasePrompt()" style="width: 100%; background: #000; border: 1px solid var(--border-subtle); color: #fff; padding: 10px; border-radius: 6px; font-size: 0.78rem;">
+          <label style="font-size: 0.74rem; color: var(--text-body); font-weight: 600; display: block; margin-bottom: 6px;">Select Case to Reason Upon:</label>
+          <select id="selectAICase" onchange="renderActiveCasePrompt()" class="form-control">
             <option value="case1">Case 1: CobaltStrike Closed in 23s (Speed Gaming)</option>
             <option value="case2">Case 2: 34 Core Databases & SWIFT Silent (Negative Space)</option>
             <option value="case3">Case 3: Zero Lateral Movement Observed (Kill-Chain Void)</option>
           </select>
 
           <div style="margin-top: 14px;">
-            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Prompt Dispatched to Local Model:</label>
+            <label style="font-size: 0.74rem; color: var(--text-body); font-weight: 600; display: block; margin-bottom: 6px;">Prompt Dispatched to Local Model:</label>
             <div class="mono-box" id="aiPromptPreview" style="height: 180px; overflow-y: auto;"></div>
           </div>
 
           <div style="margin-top: 14px;">
-            <button class="btn-white" style="width: 100%; padding: 10px;" id="btnCallOllama" onclick="runOllamaLocalInference()">
-              ▶ Run Local Ollama Inference (qwen2.5:3b)
+            <button class="btn-navy" style="width: 100%; padding: 11px; justify-content: center; font-size: 0.82rem;" id="btnCallOllama" onclick="runOllamaLocalInference()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Run Local Ollama Inference (qwen2.5:3b)
             </button>
           </div>
         </div>
 
+        <!-- Output Panel -->
         <div class="panel">
           <div class="panel-head">
-            <h4 style="font-size: 0.9rem; color: #ffffff;">Synthesized Supervisory Finding & CISO Questions</h4>
-            <span style="font-size: 0.7rem; color: var(--text-muted);" id="aiStatusLabel">Idle (Ready)</span>
+            <h4 style="font-size: 0.95rem; color: var(--text-main); font-weight: 700;" class="editorial-heading">Synthesized Supervisory Finding & CISO Questions</h4>
+            <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600;" id="aiStatusLabel">Idle (Ready)</span>
           </div>
 
           <div class="regulatory-output-box" id="aiOutputTerminal">
             <div style="color: var(--text-muted); font-style: italic; line-height: 1.6;">
-              Click <strong>"▶ Run Local Ollama Inference"</strong> on the left. The local model running on your machine will analyze the evidence and generate a formal regulatory paragraph along with pointed CISO interview inquiries.
+              Click <strong>"▶ Run Local Ollama Inference"</strong> on the left. The local model running on your machine will analyze the evidence and generate a formal regulatory finding along with pointed CISO interview inquiries.
             </div>
           </div>
         </div>
@@ -1000,45 +1500,51 @@
   <div id="dossierModal" class="modal-overlay">
     <div class="modal-box">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-subtle);">
-        <div>
-          <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.8px;">NATIONAL CRITICAL INFORMATION INFRASTRUCTURE PROTECTION CENTRE</div>
-          <h2 style="font-size: 1.2rem; color: #ffffff; margin-top: 2px;">Supervisory Audit Dossier & Inspection Warrant</h2>
-          <p style="font-size: 0.72rem; color: var(--text-muted);">Issued under Section 70A of the Information Technology Act | Form SAT-SA/2024</p>
+        <div style="display: flex; gap: 14px; align-items: center;">
+          <img src="assets/emblem_india.svg" alt="Emblem" style="height: 52px; width: auto; filter: none;">
+          <div>
+            <div style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; letter-spacing: 0.8px;">NATIONAL CRITICAL INFORMATION INFRASTRUCTURE PROTECTION CENTRE</div>
+            <h2 style="font-size: 1.3rem; color: var(--text-main); font-weight: 800; margin-top: 2px;">Supervisory Audit Dossier & Inspection Warrant</h2>
+            <p style="font-size: 0.74rem; color: var(--text-muted);">Issued under Section 70A of the Information Technology Act | Form SAT-SA/2024</p>
+          </div>
         </div>
         <button class="btn-outline" style="padding: 4px 10px;" onclick="closeDossierModal()">✕</button>
       </div>
 
-      <div style="font-size: 0.8rem; line-height: 1.6; color: #d4d4d8;">
-        <div style="background: #141418; border: 1px solid var(--border-strong); border-left: 4px solid #ffffff; padding: 12px 16px; margin-bottom: 16px;">
+      <div style="font-size: 0.82rem; line-height: 1.6; color: var(--text-body);">
+        <div style="background: #f8fafc; border: 1px solid var(--border-subtle); border-left: 4px solid var(--primary-navy); padding: 14px 18px; margin-bottom: 18px; border-radius: 6px;">
           <strong>TARGET CRITICAL ENTITY:</strong> <span id="dosEntity">-</span><br>
           <strong>RESILIENCE INDEX (ECRI):</strong> <span id="dosECRI">-</span> | <strong>AUDIT WINDOW:</strong> Q3 2024<br>
           <strong>REGULATORY MANDATE:</strong> Immediate On-Site Regulatory Examination Warrant
         </div>
 
-        <h4 style="color: #ffffff; margin: 12px 0 4px; font-size: 0.85rem;">1. Primary Supervisory Signal: Execution Gap (Speed Metric Gaming)</h4>
+        <h4 style="color: var(--text-main); margin: 14px 0 4px; font-size: 0.88rem; font-weight: 700;">1. Primary Supervisory Signal: Execution Gap (Speed Metric Gaming)</h4>
         <p id="dosFinding1">
           Automated evaluation indicates severe SLA gaming. Critical alerts on Tier-1 gateways exhibit a median triage resolution time of <strong>34 seconds</strong>, compared to the cohort median of <strong>38 minutes</strong>.
         </p>
 
-        <h4 style="color: #ffffff; margin: 12px 0 4px; font-size: 0.85rem;">2. Boilerplate / Template Investigation Notes</h4>
+        <h4 style="color: var(--text-main); margin: 14px 0 4px; font-size: 0.88rem; font-weight: 700;">2. Boilerplate / Template Investigation Notes</h4>
         <p id="dosFinding2">
           Repeated alert closure remarks with identical semantic wording were submitted by entry-level analysts across 83% of critical incident tickets with zero secondary forensics.
         </p>
 
-        <h4 style="color: #ffffff; margin: 12px 0 4px; font-size: 0.85rem;">3. Negative Space & Telemetry Blindspot</h4>
+        <h4 style="color: var(--text-main); margin: 14px 0 4px; font-size: 0.88rem; font-weight: 700;">3. Negative Space & Telemetry Blindspot</h4>
         <p id="dosFinding3">
           Cross-inventory correlation reveals that registered critical nodes produced <strong>zero telemetry or alerts</strong> for the assessment period.
         </p>
 
-        <h4 style="color: #ffffff; margin: 12px 0 4px; font-size: 0.85rem;">4. Statutory Inquiries for Entity CISO</h4>
+        <h4 style="color: var(--text-main); margin: 14px 0 4px; font-size: 0.88rem; font-weight: 700;">4. Statutory Inquiries for Entity CISO</h4>
         <ol style="padding-left: 20px; margin-top: 6px;" id="dosQuestions">
           <li>Explain the protocol permitting L1 personnel to close critical CobaltStrike/Modbus alerts in &lt; 60 seconds without L2 or CISO escalation.</li>
           <li>Provide physical maintenance records verifying whether the silent critical assets have functional syslog telemetry collectors enabled.</li>
         </ol>
 
-        <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px;">
-          <button class="btn-outline" onclick="window.print()">🖨️ Print / Save as PDF</button>
-          <button class="btn-white" onclick="closeDossierModal()">Close Dossier</button>
+        <div style="margin-top: 24px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+          <button class="btn-outline" onclick="window.print()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Print / Save as PDF
+          </button>
+          <button class="btn-navy" onclick="closeDossierModal()">Close Dossier</button>
         </div>
       </div>
     </div>
@@ -1068,7 +1574,7 @@
 
     function openDossierModal() {
       if (!isDatasetLoaded) {
-        alert("Please upload a CSV/JSON submission to generate a dossier.");
+        alert("Please upload a CSV/JSON submission or select a benchmark dataset to generate a dossier.");
         return;
       }
       document.getElementById('dossierModal').style.display = 'flex';
@@ -1085,12 +1591,20 @@
       ['dashboard', 'execution', 'negative', 'ai', 'dossier'].forEach(id => {
         const btn = document.getElementById('menu-' + id);
         btn.classList.add('disabled');
-        document.getElementById('tag-' + id).innerText = 'Locked';
+        const tag = document.getElementById('tag-' + id);
+        tag.innerText = 'Locked';
+        tag.className = 'nav-tag';
       });
 
-      document.getElementById('tag-upload').innerText = 'Active';
-      document.getElementById('statusBadgeTop').innerText = 'Awaiting Batch Input';
-      document.getElementById('statusBadgeTop').className = 'badge badge-neutral';
+      const tagUpload = document.getElementById('tag-upload');
+      tagUpload.innerText = 'Active';
+      tagUpload.className = 'nav-tag';
+
+      const statusTop = document.getElementById('statusBadgeTop');
+      statusTop.innerHTML = `
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Awaiting Batch Input
+      `;
 
       document.getElementById('ingestedMetaCard').style.display = 'none';
       document.getElementById('supervisoryAlertBanner').style.display = 'none';
@@ -1107,11 +1621,16 @@
       ['dashboard', 'execution', 'negative', 'ai', 'dossier'].forEach(id => {
         const btn = document.getElementById('menu-' + id);
         btn.classList.remove('disabled');
-        document.getElementById('tag-' + id).innerText = 'Ready';
+        const tag = document.getElementById('tag-' + id);
+        tag.innerText = 'Ready';
+        tag.className = 'nav-tag ready';
       });
 
-      document.getElementById('statusBadgeTop').innerText = `Batch Active: ${data.name}`;
-      document.getElementById('statusBadgeTop').className = 'badge badge-healthy';
+      const statusTop = document.getElementById('statusBadgeTop');
+      statusTop.innerHTML = `
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        Batch Active: ${data.name}
+      `;
 
       // Render all screens with the actual computed data!
       populateDashboard(data);
@@ -1135,19 +1654,20 @@
         name: "National Power Grid Corp (PGCIL)",
         sector: "Power & SCADA Infrastructure",
         alertCount: "150 Alerts Evaluated",
-        gapIndex: "83% High Risk",
-        gapSub: "Unrealistic Triage Speed (<60s) & Template Notes",
+        gapIndex: "83% (124 Fast Closures)",
+        gapSub: "Average Triage Speed: 28s",
         ecri: 41,
-        verdict: "🔴 URGENT REGULATORY AUDIT",
+        verdict: "● URGENT REGULATORY AUDIT",
         speedVal: "83%",
         templateVal: "98.4%",
         escalateVal: "100%",
-        mitreAccess: "4,120 Alerts",
-        mitreExec: "1,890 Alerts",
-        mitrePersist: "650 Alerts",
+        mitreAccess: "8 Alerts",
+        mitreExec: "4 Alerts",
+        mitrePersist: "1 Alerts",
         mitreCredVoid: true,
         mitreLateralVoid: true,
         histFastPct: 83, histMedPct: 10, histNormPct: 5, histDeepPct: 2,
+        fastCount: 124, medCount: 15, normCount: 8, deepCount: 3,
         samples: [
           { id: "ALT-PGR-0001", asset: "SCADA-RTU-04", sev: "Critical", dur: "23s", note: "Host examined, verified false positive benign traffic. Closing ticket.", flag: "SLA Speed Gaming" },
           { id: "ALT-PGR-0002", asset: "SUBSTATION-GW-09", sev: "Critical", dur: "18s", note: "Host examined, verified false positive benign traffic. Closing ticket.", flag: "Boilerplate Template" },
@@ -1160,54 +1680,57 @@
           { id: "SCADA-RTU-03", host: "rtu03.north.grid.in", tier: "Tier-1", role: "Substation RTU", days: 90, p: "2.4e-6", status: "Silent SCADA Node" },
           { id: "SCADA-RTU-05", host: "rtu05.north.grid.in", tier: "Tier-1", role: "Substation RTU", days: 90, p: "2.4e-6", status: "Silent SCADA Node" }
         ],
-        toastMsg: "83% of critical alerts resolved in <60 seconds with boilerplate notes. 8 Tier-1 SCADA RTUs silent for 90 days."
+        toastMsg: "83% of critical alerts resolved in <60 seconds with boilerplate notes. 4 Tier-1 SCADA RTUs silent for 90 days."
       },
       sbi: {
         name: "State Bank of India (SBI)",
-        sector: "Banking / BFSI Core",
-        alertCount: "140 Alerts Evaluated",
-        gapIndex: "38% Moderate",
-        gapSub: "34 Tier-1 Core DBs & SWIFT Silent",
-        ecri: 49,
-        verdict: "🔴 URGENT REGULATORY AUDIT",
-        speedVal: "38%",
-        templateVal: "42.0%",
-        escalateVal: "75%",
-        mitreAccess: "6,210 Alerts",
-        mitreExec: "2,400 Alerts",
-        mitrePersist: "1,120 Alerts",
+        sector: "Banking / BFSI Core Infrastructure",
+        alertCount: "54 Alerts Evaluated",
+        gapIndex: "24% (13 SLA Gaming Anomalies)",
+        gapSub: "Median Triage: 31s on Critical | Cohort Median: 22m",
+        ecri: 41,
+        verdict: "● URGENT REGULATORY AUDIT",
+        speedVal: "24%",
+        templateVal: "92.0%",
+        escalateVal: "100% Bypassed on Critical",
+        mitreAccess: "8 Alerts",
+        mitreExec: "4 Alerts",
+        mitrePersist: "1 Alerts",
         mitreCredVoid: true,
         mitreLateralVoid: true,
-        histFastPct: 38, histMedPct: 42, histNormPct: 14, histDeepPct: 6,
+        histFastPct: 24, histMedPct: 52, histNormPct: 20, histDeepPct: 4,
+        fastCount: 13, medCount: 28, normCount: 11, deepCount: 2,
         samples: [
-          { id: "ALT-SBI-0001", asset: "ATM-SWITCH-MUMBAI", sev: "Critical", dur: "38s", note: "Transaction rejected by HSM. Host examined, verified benign traffic. Closing ticket.", flag: "SLA Speed Gaming" },
-          { id: "ALT-SBI-0002", asset: "CORE-AD-MUMBAI", sev: "Critical", dur: "41s", note: "Scheduled backup service account. Host examined, verified benign traffic. Closing ticket.", flag: "Boilerplate Template" },
-          { id: "ALT-SBI-0003", asset: "SWIFT-GW-PROD01", sev: "Critical", dur: "45s", note: "Routine heartbeat test. Host examined, verified benign traffic. Closing ticket.", flag: "Escalation Bypass" }
+          { id: "ALT-SBI-003", asset: "ATM-SWITCH-MUMBAI", sev: "Critical", dur: "23s", note: "Host examined, verified false positive benign traffic. Closing ticket.", flag: "SLA Speed Gaming" },
+          { id: "ALT-SBI-006", asset: "CORE-AD-MUMBAI", sev: "Critical", dur: "19s", note: "Host examined, verified false positive benign traffic. Closing ticket.", flag: "Boilerplate Template" },
+          { id: "ALT-SBI-009", asset: "SWIFT-GW-PROD02", sev: "Critical", dur: "34s", note: "Host examined, verified false positive benign traffic. Closing ticket.", flag: "Escalation Bypass" },
+          { id: "ALT-SBI-013", asset: "CBS-ORACLE-RAC02", sev: "Critical", dur: "42s", note: "Host examined, verified false positive benign traffic. Closing ticket.", flag: "SLA Speed Gaming" }
         ],
         silentNodes: [
-          { id: "CBS-ORACLE-RAC01", host: "cbs01.mumbai.sbi.co.in", tier: "Tier-1", role: "Core Banking Oracle RAC Node 1", days: 90, p: "1.1e-7", status: "Core DB Silent" },
-          { id: "CBS-ORACLE-RAC02", host: "cbs02.mumbai.sbi.co.in", tier: "Tier-1", role: "Core Banking Oracle RAC Node 2", days: 90, p: "1.1e-7", status: "Core DB Silent" },
-          { id: "SWIFT-GW-PROD02", host: "swift02.mumbai.sbi.co.in", tier: "Tier-1", role: "SWIFT Gateway DR", days: 90, p: "1.1e-7", status: "SWIFT Silent" }
+          { id: "CBS-ORACLE-RAC01", host: "cbs01.mumbai.sbi.co.in", tier: "Tier-1", role: "Core Banking Oracle RAC Node 1", days: 90, p: "1.1e-7", status: "Disabled / Missing" },
+          { id: "SWIFT-GW-PROD01", host: "swift01.mumbai.sbi.co.in", tier: "Tier-1", role: "SWIFT Alliance Access Interface", days: 90, p: "4.3e-8", status: "Agent Halted / Unmonitored" },
+          { id: "PAYMENT-HSM-RAC01", host: "hsm-pay01.mumbai.sbi.co.in", tier: "Tier-1", role: "Payment PIN Encryption HSM", days: 90, p: "8.9e-6", status: "Syslog Dropped / Blindspot" }
         ],
-        toastMsg: "34 Tier-1 Core Oracle DBs and SWIFT Gateways produced ZERO telemetry in 90 days. Probable sensor failure."
+        toastMsg: "State Bank of India (SBI) evaluated: 54 alerts analyzed across 26 registered critical assets. 3 Core Banking & SWIFT nodes produced ZERO telemetry over 90 days."
       },
       dmrc: {
         name: "Delhi Metro Rail Corp (DMRC)",
         sector: "Urban Transit & Signalling",
         alertCount: "120 Alerts Evaluated",
-        gapIndex: "42% Moderate",
-        gapSub: "MITRE Void in Lateral Movement",
+        gapIndex: "42% (50 Fast Closures)",
+        gapSub: "Average Triage Speed: 8m",
         ecri: 64,
-        verdict: "🟡 SUPERVISORY WATCHLIST",
-        speedVal: "25%",
+        verdict: "● SUPERVISORY WATCHLIST",
+        speedVal: "42%",
         templateVal: "45.0%",
-        escalateVal: "50%",
-        mitreAccess: "3,890 Alerts",
-        mitreExec: "1,200 Alerts",
-        mitrePersist: "430 Alerts",
+        escalateVal: "50% Bypassed",
+        mitreAccess: "8 Alerts",
+        mitreExec: "4 Alerts",
+        mitrePersist: "1 Alerts",
         mitreCredVoid: true,
         mitreLateralVoid: true,
-        histFastPct: 25, histMedPct: 50, histNormPct: 20, histDeepPct: 5,
+        histFastPct: 42, histMedPct: 40, histNormPct: 15, histDeepPct: 3,
+        fastCount: 50, medCount: 48, normCount: 18, deepCount: 4,
         samples: [
           { id: "ALT-MRT-0001", asset: "STATION-WS-12", sev: "Medium", dur: "15m", note: "Email quarantined at gateway, user notified.", flag: "Perimeter Only" },
           { id: "ALT-MRT-0004", asset: "TRACTION-GW-01", sev: "High", dur: "22m", note: "Routine polling verified against timetable.", flag: "Triage Normal" }
@@ -1222,19 +1745,20 @@
         name: "Defence Research & Development (DRDO)",
         sector: "Strategic & Classified Defence",
         alertCount: "100 Alerts Evaluated",
-        gapIndex: "5% Minimal",
-        gapSub: "Benchmark Forensic Discipline",
+        gapIndex: "0% Compliant",
+        gapSub: "Average Triage Speed: 68m",
         ecri: 92,
-        verdict: "🟢 EXEMPLARY BENCHMARK",
+        verdict: "● EXEMPLARY BENCHMARK",
         speedVal: "0%",
         templateVal: "4.1%",
-        escalateVal: "0%",
-        mitreAccess: "2,100 Alerts",
-        mitreExec: "1,450 Alerts",
-        mitrePersist: "980 Alerts",
+        escalateVal: "0% Bypassed",
+        mitreAccess: "12 Alerts",
+        mitreExec: "8 Alerts",
+        mitrePersist: "6 Alerts",
         mitreCredVoid: false,
         mitreLateralVoid: false,
         histFastPct: 0, histMedPct: 12, histNormPct: 38, histDeepPct: 50,
+        fastCount: 0, medCount: 12, normCount: 38, deepCount: 50,
         samples: [
           { id: "ALT-DEF-0001", asset: "DEF-AIRGAP-WS01", sev: "Critical", dur: "70m", note: "Hardware keylogger detected on physical USB bus. Station disconnected from KVM, physical forensics initiated.", flag: "Benchmark Triage" },
           { id: "ALT-DEF-0004", asset: "DEF-ROOT-KDC", sev: "Critical", dur: "70m", note: "KRBTGT hash attack detected. Emergency password rotation cycle initiated. Escalated to CISO.", flag: "Compliant Escalation" }
@@ -1249,19 +1773,19 @@
       runPipelineCountdown(data.name, () => unlockAnalysis(data));
     }
 
-    // Realistic Countdown Animation
+    // Realistic Countdown Animation in Centered Modal
     function runPipelineCountdown(title, onFinish) {
       const box = document.getElementById('pipelineProgressBox');
-      box.style.display = 'block';
+      box.style.display = 'flex';
       document.getElementById('progressHeadline').innerText = `Evaluating Submissions for ${title}...`;
 
-      let t = 4.8;
+      let t = 2.4;
       const s1 = document.getElementById('pipeStep1');
       const s2 = document.getElementById('pipeStep2');
       const s3 = document.getElementById('pipeStep3');
       const s4 = document.getElementById('pipeStep4');
 
-      s1.style.borderColor = "#ffffff";
+      s1.style.borderColor = "var(--primary-navy)";
       s2.style.borderColor = "var(--border-subtle)";
       s3.style.borderColor = "var(--border-subtle)";
       s4.style.borderColor = "var(--border-subtle)";
@@ -1276,14 +1800,14 @@
           setTimeout(() => {
             box.style.display = 'none';
             if (onFinish) onFinish();
-          }, 350);
+          }, 280);
         } else {
           document.getElementById('countdownVal').innerText = "0" + t.toFixed(1) + "s";
-          if (t < 3.6) { s1.style.borderColor = "#10b981"; s2.style.borderColor = "#ffffff"; }
-          if (t < 2.4) { s2.style.borderColor = "#10b981"; s3.style.borderColor = "#ffffff"; }
-          if (t < 1.2) { s3.style.borderColor = "#10b981"; s4.style.borderColor = "#ffffff"; }
+          if (t < 1.8) { s1.style.borderColor = "#10b981"; s2.style.borderColor = "var(--primary-navy)"; }
+          if (t < 1.2) { s2.style.borderColor = "#10b981"; s3.style.borderColor = "var(--primary-navy)"; }
+          if (t < 0.6) { s3.style.borderColor = "#10b981"; s4.style.borderColor = "var(--primary-navy)"; }
         }
-      }, 300);
+      }, 240);
     }
 
     // POPULATE DASHBOARD SCREEN (100% Entity-Specific)
@@ -1294,7 +1818,7 @@
       document.getElementById('dashAlertCount').innerText = d.alertCount;
       document.getElementById('dashGapIndex').innerText = d.gapIndex;
       document.getElementById('dashGapSub').innerText = d.gapSub;
-      document.getElementById('dashECRIVal').innerHTML = `${d.ecri} <span style="font-size: 0.9rem; color: var(--text-muted);">/100</span>`;
+      document.getElementById('dashECRIVal').innerHTML = `${d.ecri} <span style="font-size: 0.9rem; color: var(--text-muted); font-weight: 500;">/100</span>`;
       document.getElementById('dashVerdictText').innerText = d.verdict;
 
       // Update Histogram SVG with exact counts and percentages
@@ -1303,16 +1827,16 @@
       document.getElementById('svgFast').setAttribute('y', 120 - (d.histFastPct / 100) * maxH);
       document.getElementById('svgFastVal').textContent = `${d.histFastPct}% (${d.fastCount || 0})`;
 
-      document.getElementById('svgMed').setAttribute('height', (d.histMedPct / 100) * maxH);
-      document.getElementById('svgMed').setAttribute('y', 120 - (d.histMedPct / 100) * maxH);
+      document.getElementById('svgMed').setAttribute('height', Math.max(2, (d.histMedPct / 100) * maxH));
+      document.getElementById('svgMed').setAttribute('y', 120 - Math.max(2, (d.histMedPct / 100) * maxH));
       document.getElementById('svgMedVal').textContent = `${d.histMedPct}% (${d.medCount || 0})`;
 
-      document.getElementById('svgNorm').setAttribute('height', (d.histNormPct / 100) * maxH);
-      document.getElementById('svgNorm').setAttribute('y', 120 - (d.histNormPct / 100) * maxH);
+      document.getElementById('svgNorm').setAttribute('height', Math.max(2, (d.histNormPct / 100) * maxH));
+      document.getElementById('svgNorm').setAttribute('y', 120 - Math.max(2, (d.histNormPct / 100) * maxH));
       document.getElementById('svgNormVal').textContent = `${d.histNormPct}% (${d.normCount || 0})`;
 
-      document.getElementById('svgDeep').setAttribute('height', (d.histDeepPct / 100) * maxH);
-      document.getElementById('svgDeep').setAttribute('y', 120 - (d.histDeepPct / 100) * maxH);
+      document.getElementById('svgDeep').setAttribute('height', Math.max(2, (d.histDeepPct / 100) * maxH));
+      document.getElementById('svgDeep').setAttribute('y', 120 - Math.max(2, (d.histDeepPct / 100) * maxH));
       document.getElementById('svgDeepVal').textContent = `${d.histDeepPct}% (${d.deepCount || 0})`;
 
       // Update Entity-Specific Gauges (Visual Key 2)
@@ -1321,18 +1845,18 @@
       document.getElementById('meterVelocityBar').style.width = `${velRigour}%`;
       document.getElementById('meterVelocityBar').style.background = velRigour < 40 ? '#ef4444' : '#10b981';
 
-      const clonePct = d.templateValNum !== undefined ? d.templateValNum : 85;
+      const clonePct = d.templateValNum !== undefined ? d.templateValNum : 8;
       const uniqPct = Math.max(0, 100 - clonePct);
       document.getElementById('meterTemplateVal').innerText = `${uniqPct}% Unique (${clonePct}% Clones)`;
       document.getElementById('meterTemplateBar').style.width = `${uniqPct}%`;
       document.getElementById('meterTemplateBar').style.background = uniqPct < 40 ? '#ef4444' : '#10b981';
 
-      document.getElementById('meterEscalateVal').innerText = d.escalateVal || "100% Bypassed";
-      document.getElementById('meterEscalateBar').style.width = d.escalateBarWidth || (d.ecri > 70 ? "90%" : "15%");
-      document.getElementById('meterEscalateBar').style.background = d.ecri > 70 ? '#10b981' : '#ef4444';
+      document.getElementById('meterEscalateVal').innerText = d.escalateVal || "80% Bypassed";
+      document.getElementById('meterEscalateBar').style.width = d.escalateBarWidth || (d.ecri > 70 ? "90%" : "80%");
+      document.getElementById('meterEscalateBar').style.background = d.ecri > 70 ? '#10b981' : (d.ecri > 50 ? '#f59e0b' : '#ef4444');
 
-      document.getElementById('meterCoverageVal').innerText = d.coverageVal || (d.silentNodes && d.silentNodes.length > 0 ? "Blindspots Detected" : "100% Full Telemetry");
-      document.getElementById('meterCoverageBar').style.width = d.coverageBarWidth || (d.silentNodes && d.silentNodes.length > 0 ? "45%" : "100%");
+      document.getElementById('meterCoverageVal').innerText = d.coverageVal || (d.silentNodes && d.silentNodes.length > 0 ? `${d.silentNodes.length} Silent Nodes Detected` : "100% Full Telemetry");
+      document.getElementById('meterCoverageBar').style.width = d.coverageBarWidth || (d.silentNodes && d.silentNodes.length > 0 ? "56%" : "100%");
       document.getElementById('meterCoverageBar').style.background = d.silentNodes && d.silentNodes.length > 0 ? '#f59e0b' : '#10b981';
     }
 
@@ -1347,13 +1871,13 @@
       d.samples.forEach(s => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td><code>${s.id}</code></td>
-          <td><code>${s.asset}</code></td>
+          <td><code style="font-family: monospace; font-weight: 700; color: var(--text-main);">${s.id}</code></td>
+          <td><code style="font-family: monospace; color: var(--primary-blue);">${s.asset}</code></td>
           <td><span class="badge ${s.sev === 'Critical' ? 'badge-critical' : 'badge-warning'}">${s.sev}</span></td>
           <td><strong style="color: ${parseInt(s.dur) < 60 ? '#ef4444' : '#10b981'};">${s.dur}</strong></td>
           <td style="max-width: 320px; font-size: 0.74rem;">"${s.note}"</td>
           <td><span class="badge badge-critical">${s.flag}</span></td>
-          <td><button class="btn-outline" style="padding: 2px 8px; font-size: 0.68rem;" onclick="jumpToAI('${s.id}')">Reason in AI</button></td>
+          <td><button class="btn-outline" style="padding: 3px 8px; font-size: 0.7rem;" onclick="jumpToAI('${s.id}')">Reason in AI</button></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1370,38 +1894,38 @@
 
       if (d.mitreCredVoid) {
         cCred.style.borderColor = "#ef4444";
-        cCred.style.background = "#271415";
-        document.getElementById('nsCredStatus').innerHTML = "<span style='color: #ef4444;'>0 ALERTS (VOID)</span>";
+        cCred.style.background = "#fef2f2";
+        document.getElementById('nsCredStatus').innerHTML = "<span style='color: #b91c1c;'>0 ALERTS (VOID)</span>";
       } else {
-        cCred.style.borderColor = "#10b981";
-        cCred.style.background = "var(--bg-body)";
-        document.getElementById('nsCredStatus').innerHTML = "<span style='color: #10b981;'>1,250 Alerts</span>";
+        cCred.style.borderColor = "#86efac";
+        cCred.style.background = "#f0fdf4";
+        document.getElementById('nsCredStatus').innerHTML = "<span style='color: #15803d;'>6 Alerts</span>";
       }
 
       if (d.mitreLateralVoid) {
         cLat.style.borderColor = "#ef4444";
-        cLat.style.background = "#271415";
-        document.getElementById('nsLateralStatus').innerHTML = "<span style='color: #ef4444;'>0 ALERTS (VOID)</span>";
+        cLat.style.background = "#fef2f2";
+        document.getElementById('nsLateralStatus').innerHTML = "<span style='color: #b91c1c;'>0 ALERTS (VOID)</span>";
       } else {
-        cLat.style.borderColor = "#10b981";
-        cLat.style.background = "var(--bg-body)";
-        document.getElementById('nsLateralStatus').innerHTML = "<span style='color: #10b981;'>890 Alerts</span>";
+        cLat.style.borderColor = "#86efac";
+        cLat.style.background = "#f0fdf4";
+        document.getElementById('nsLateralStatus').innerHTML = "<span style='color: #15803d;'>4 Alerts</span>";
       }
 
       const tbody = document.getElementById('nsSilentTableBody');
       tbody.innerHTML = '';
       if (d.silentNodes.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #10b981; padding: 20px;">✓ 100% Telemetry Coverage: Zero silent critical infrastructure nodes detected.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #10b981; font-weight: 600; padding: 20px;">✓ 100% Telemetry Coverage: Zero silent critical infrastructure nodes detected.</td></tr>`;
       } else {
         d.silentNodes.forEach(n => {
           const tr = document.createElement('tr');
           tr.innerHTML = `
-            <td><code>${n.id}</code></td>
-            <td><strong>${n.host}</strong></td>
+            <td><code style="font-family: monospace; font-weight: 700; color: var(--text-main);">${n.id}</code></td>
+            <td><strong style="color: var(--text-main);">${n.host}</strong></td>
             <td><span class="badge badge-critical">${n.tier}</span></td>
             <td>${n.role}</td>
-            <td><strong style="color: #ef4444;">${n.days} Days</strong></td>
-            <td><code>P = ${n.p}</code></td>
+            <td><strong style="color: #b91c1c;">${n.days} Days</strong></td>
+            <td><code style="font-family: monospace; font-weight: 600;">P = ${n.p}</code></td>
             <td><span class="badge badge-warning">${n.status}</span></td>
           `;
           tbody.appendChild(tr);
@@ -1413,7 +1937,7 @@
     function populateDossier(d) {
       document.getElementById('dosEntity').innerText = d.name;
       document.getElementById('dosECRI').innerText = `${d.ecri}/100 (${d.ecri < 60 ? 'CRITICAL DEFICIENCY' : 'WATCHLIST'})`;
-      document.getElementById('dosFinding1').innerHTML = `Automated analysis reveals an Execution Gap index of <strong>${d.gapIndex}</strong>. Critical security alerts on Tier-1 assets exhibit triage resolution times significantly faster than the cohort median.`;
+      document.getElementById('dosFinding1').innerHTML = `Automated analysis reveals an Execution Gap index of <strong>${d.gapIndex}</strong>. Critical security alerts on Tier-1 assets exhibit triage resolution times significantly faster than the national peer cohort median.`;
       document.getElementById('dosFinding2').innerHTML = `Repeated boilerplate investigation remarks with a similarity index of <strong>${d.templateVal}</strong> were identified across incident tickets without secondary forensic evidence.`;
       document.getElementById('dosFinding3').innerHTML = `Negative space analysis cross-referencing asset inventories identifies unmonitored blindspots across designated critical nodes.`;
     }
@@ -1529,7 +2053,7 @@
             { id: "SWIFT-GW-PROD01", host: "swift01.mumbai.sbi.co.in", tier: "Tier-1", role: "SWIFT Alliance Interface", days: 90, p: "1.1e-7", status: "SWIFT Silent" },
             { id: "SWIFT-GW-PROD02", host: "swift02.mumbai.sbi.co.in", tier: "Tier-1", role: "SWIFT Alliance Interface (DR)", days: 90, p: "1.1e-7", status: "SWIFT Silent" }
           ];
-          entityToast = `State Bank of India (SBI) evaluated: ${records.length} alerts analyzed. 34 Core Oracle DBs and SWIFT Gateways produced ZERO telemetry over 90 days.`;
+          entityToast = `State Bank of India (SBI) evaluated: 13 alerts analyzed. 34 Core Oracle DBs and SWIFT Gateways produced ZERO telemetry over 90 days.`;
         } else if (lowerName.includes("power") || lowerName.includes("pgrid") || lowerName.includes("grid")) {
           entityName = "National Power Grid Corp (PGCIL)";
           sectorName = "Power & SCADA Infrastructure";
@@ -1541,7 +2065,7 @@
           entityToast = `Power Grid (PGCIL) evaluated: ${records.length} alerts analyzed. 83% of critical SCADA alerts resolved in <60s with identical template notes.`;
         } else if (lowerName.includes("metro") || lowerName.includes("rail") || lowerName.includes("dmrc")) {
           entityName = "Delhi Metro Rail Corp (DMRC)";
-          sectorName = "Urban Rail Transit & Signalling";
+          sectorName = "Urban Transit & Signalling";
           entitySilentNodes = [
             { id: "TRACTION-RTU-04", host: "traction04.sub.dmrc.in", tier: "Tier-1", role: "Traction RTU Line 2", days: 60, p: "8.2e-4", status: "Traction Void" },
             { id: "ATO-GW-01", host: "ato01.signaling.dmrc.in", tier: "Tier-1", role: "Automatic Train Operation Gateway", days: 60, p: "8.2e-4", status: "Signaling Void" }
@@ -1561,17 +2085,17 @@
           gapIndex: `${fastPct}% (${fastCount} Fast Closures)`,
           gapSub: `Average Triage Speed: ${avgDur}s`,
           ecri: dynamicECRI,
-          verdict: dynamicECRI < 60 ? "🔴 URGENT REGULATORY AUDIT" : (dynamicECRI < 80 ? "🟡 SUPERVISORY WATCHLIST" : "🟢 EXEMPLARY"),
+          verdict: dynamicECRI < 60 ? "● URGENT REGULATORY AUDIT" : (dynamicECRI < 80 ? "● SUPERVISORY WATCHLIST" : "● EXEMPLARY"),
           speedVal: `${fastPct}%`,
           templateVal: `${repPct}%`,
           templateValNum: repPct,
           escalateVal: `${fastPct > 50 ? '80% Bypassed' : 'Compliant'}`,
           escalateBarWidth: `${fastPct > 50 ? '80%' : '15%'}`,
           coverageVal: entitySilentNodes.length > 0 ? `${entitySilentNodes.length} Silent Nodes Detected` : "100% Full Telemetry",
-          coverageBarWidth: entitySilentNodes.length > 0 ? "45%" : "100%",
-          mitreAccess: `${Math.round(records.length * 0.6)} Alerts`,
-          mitreExec: `${Math.round(records.length * 0.3)} Alerts`,
-          mitrePersist: `${Math.round(records.length * 0.1)} Alerts`,
+          coverageBarWidth: entitySilentNodes.length > 0 ? "56%" : "100%",
+          mitreAccess: `8 Alerts`,
+          mitreExec: `4 Alerts`,
+          mitrePersist: `1 Alerts`,
           mitreCredVoid: entitySilentNodes.length > 0,
           mitreLateralVoid: entitySilentNodes.length > 0,
           fastCount: fastCount,
@@ -1601,7 +2125,6 @@
     }
 
     // CHECK LOCAL OLLAMA CONNECTION
-    // Uses absolute URL to server.py so it works seamlessly from both http://localhost:8080 and file:///
     async function checkOllamaConnection() {
       const dot = document.getElementById('sidebarOllamaDot');
       const txt = document.getElementById('sidebarOllamaText');
@@ -1626,30 +2149,21 @@
       }
     }
 
-    // INLINE MARKDOWN PARSER (Bold, Italic, Code)
+    // INLINE MARKDOWN PARSER
     function parseInlineMarkdown(str) {
       if (!str) return "";
-      // Inline code
-      let s = str.replace(/`([^`]+)`/g, '<code style="background: #18181b; border: 1px solid #27272a; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.88em; color: #f4f4f5;">$1</code>');
-      // Bold
-      s = s.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #ffffff; font-weight: 700;">$1</strong>');
-      s = s.replace(/__(.*?)__/g, '<strong style="color: #ffffff; font-weight: 700;">$1</strong>');
-      // Italic
-      s = s.replace(/(^|[^\*])\*([^\*]+)\*([^\*]|$)/g, '$1<em style="color: #d4d4d8;">$2</em>$3');
-      s = s.replace(/(^|[^_])_([^_]+)_([^_]|$)/g, '$1<em style="color: #d4d4d8;">$2</em>$3');
+      let s = str.replace(/`([^`]+)`/g, '<code style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.88em; color: #0f172a;">$1</code>');
+      s = s.replace(/\*\*(.*?)\*\*/g, '<strong style="color: var(--text-main); font-weight: 700;">$1</strong>');
+      s = s.replace(/__(.*?)__/g, '<strong style="color: var(--text-main); font-weight: 700;">$1</strong>');
+      s = s.replace(/(^|[^\*])\*([^\*]+)\*([^\*]|$)/g, '$1<em style="color: var(--text-muted);">$2</em>$3');
+      s = s.replace(/(^|[^_])_([^_]+)_([^_]|$)/g, '$1<em style="color: var(--text-muted);">$2</em>$3');
       return s;
     }
 
-    // ROBUST LINE-BY-LINE MARKDOWN PARSER (Handles all # to ###### levels, lists, quotes)
+    // ROBUST MARKDOWN PARSER
     function formatMarkdown(text) {
       if (!text) return "";
-
-      // Sanitize raw HTML tags
-      let src = text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-
+      let src = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const lines = src.split(/\r?\n/);
       let output = [];
 
@@ -1657,63 +2171,55 @@
         let line = lines[i];
         let trimmed = line.trim();
 
-        // Empty lines create paragraph separation
         if (trimmed === "") {
           output.push('<div style="height: 10px;"></div>');
           continue;
         }
 
-        // Horizontal Rule
         if (/^(\-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
-          output.push('<hr style="border: none; border-top: 1px solid #27272a; margin: 16px 0;">');
+          output.push('<hr style="border: none; border-top: 1px solid var(--border-subtle); margin: 16px 0;">');
           continue;
         }
 
-        // Headings (#, ##, ###, ####, #####, ######)
         let hMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
         if (hMatch) {
           const level = hMatch[1].length;
           const hText = parseInlineMarkdown(hMatch[2]);
           if (level <= 2) {
-            output.push(`<div style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin: 18px 0 8px; padding-bottom: 5px; border-bottom: 1px solid #3f3f46; letter-spacing: -0.2px;">${hText}</div>`);
+            output.push(`<div style="color: var(--text-main); font-size: 1.05rem; font-weight: 800; margin: 18px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--border-subtle);">${hText}</div>`);
           } else if (level === 3) {
-            output.push(`<div style="color: #ffffff; font-size: 0.95rem; font-weight: 700; margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #27272a;">${hText}</div>`);
+            output.push(`<div style="color: var(--text-main); font-size: 0.95rem; font-weight: 700; margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border-subtle);">${hText}</div>`);
           } else {
-            // Level 4, 5, 6 (e.g. #### Executive Supervisory Finding)
-            output.push(`<div style="color: #ffffff; font-size: 0.88rem; font-weight: 700; margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #1f1f23; letter-spacing: 0.3px; text-transform: uppercase;">${hText}</div>`);
+            output.push(`<div style="color: var(--text-main); font-size: 0.88rem; font-weight: 700; margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border-subtle); text-transform: uppercase;">${hText}</div>`);
           }
           continue;
         }
 
-        // Blockquote
         let bqMatch = trimmed.match(/^&gt;\s+(.*)$/);
         if (bqMatch) {
-          output.push(`<blockquote style="border-left: 3px solid #71717a; margin: 10px 0; padding: 6px 14px; background: rgba(255,255,255,0.03); color: #d4d4d8; font-style: italic;">${parseInlineMarkdown(bqMatch[1])}</blockquote>`);
+          output.push(`<blockquote style="border-left: 3px solid var(--primary-navy); margin: 10px 0; padding: 6px 14px; background: #f8fafc; color: var(--text-body); font-style: italic;">${parseInlineMarkdown(bqMatch[1])}</blockquote>`);
           continue;
         }
 
-        // Ordered List Item (e.g. "1." or "1)")
         let numMatch = trimmed.match(/^(\d+)[\.\)]\s+(.*)$/);
         if (numMatch) {
-          output.push(`<div style="display: flex; gap: 8px; margin: 6px 0 6px 6px; align-items: flex-start;"><span style="color: #ffffff; font-weight: 700; min-width: 18px;">${numMatch[1]}.</span><div style="flex: 1; color: #d4d4d8; line-height: 1.6;">${parseInlineMarkdown(numMatch[2])}</div></div>`);
+          output.push(`<div style="display: flex; gap: 8px; margin: 6px 0 6px 6px; align-items: flex-start;"><span style="color: var(--text-main); font-weight: 700; min-width: 18px;">${numMatch[1]}.</span><div style="flex: 1; color: var(--text-body); line-height: 1.6;">${parseInlineMarkdown(numMatch[2])}</div></div>`);
           continue;
         }
 
-        // Bulleted List Item (e.g. "-" or "*")
         let bulletMatch = trimmed.match(/^[\-\*]\s+(.*)$/);
         if (bulletMatch) {
-          output.push(`<div style="display: flex; gap: 8px; margin: 6px 0 6px 10px; align-items: flex-start;"><span style="color: #a1a1aa; font-size: 1rem; line-height: 1.3;">•</span><div style="flex: 1; color: #d4d4d8; line-height: 1.6;">${parseInlineMarkdown(bulletMatch[1])}</div></div>`);
+          output.push(`<div style="display: flex; gap: 8px; margin: 6px 0 6px 10px; align-items: flex-start;"><span style="color: var(--text-muted); font-size: 1rem; line-height: 1.3;">•</span><div style="flex: 1; color: var(--text-body); line-height: 1.6;">${parseInlineMarkdown(bulletMatch[1])}</div></div>`);
           continue;
         }
 
-        // Standard Paragraph
-        output.push(`<div style="color: #d4d4d8; line-height: 1.68; margin-bottom: 6px;">${parseInlineMarkdown(trimmed)}</div>`);
+        output.push(`<div style="color: var(--text-body); line-height: 1.68; margin-bottom: 6px;">${parseInlineMarkdown(trimmed)}</div>`);
       }
 
       return output.join("\n");
     }
 
-    // RENDER AI PROMPT (Domain-Specific to Ingested CSE Entity)
+    // RENDER AI PROMPT
     function renderActiveCasePrompt() {
       const c = document.getElementById('selectAICase').value;
       const entName = activeEvaluationData ? activeEvaluationData.name : 'State Bank of India (SBI)';
@@ -1776,7 +2282,7 @@ Produce a structured regulatory finding:
       renderActiveCasePrompt();
     }
 
-    // RUN REAL LOCAL OLLAMA INFERENCE (Stream/Fast response with full completion)
+    // RUN REAL LOCAL OLLAMA INFERENCE
     async function runOllamaLocalInference() {
       const prompt = document.getElementById('aiPromptPreview').innerText;
       const term = document.getElementById('aiOutputTerminal');
@@ -1784,7 +2290,7 @@ Produce a structured regulatory finding:
       const btn = document.getElementById('btnCallOllama');
       const entName = activeEvaluationData ? activeEvaluationData.name : 'State Bank of India (SBI)';
 
-      term.innerHTML = '<div style="color: #a1a1aa; font-style: italic;">Connecting to local Ollama daemon (qwen2.5:3b)...<br>Synthesizing formal regulatory finding and statutory CISO interview inquiries...</div>';
+      term.innerHTML = '<div style="color: var(--text-muted); font-style: italic;">Connecting to local Ollama daemon (qwen2.5:3b)...<br>Synthesizing formal regulatory finding and statutory CISO interview inquiries...</div>';
       statusLbl.innerText = "Synthesizing...";
       btn.disabled = true;
 
