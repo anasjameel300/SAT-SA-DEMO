@@ -256,7 +256,7 @@
       margin-right: -16px;
       margin-bottom: -16px;
       padding: 105px 16px 16px 16px;
-      background-image: url('assets/sidebar_monument.png');
+      background-image: url('../assets/sidebar_monument.png');
       background-size: 100% auto;
       background-repeat: no-repeat;
       background-position: bottom center;
@@ -311,7 +311,7 @@
       margin-bottom: 24px;
       position: relative;
       z-index: 10;
-      background-image: url('assets/header_monument_perfect.png');
+      background-image: url('../assets/header_monument_perfect.png');
       background-repeat: no-repeat;
       background-position: center right;
       background-size: auto 65px;
