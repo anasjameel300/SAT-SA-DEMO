@@ -1626,34 +1626,91 @@
       }
     }
 
-    // FORMAT MARKDOWN TO HIGH-READABILITY REGULATORY HTML
+    // INLINE MARKDOWN PARSER (Bold, Italic, Code)
+    function parseInlineMarkdown(str) {
+      if (!str) return "";
+      // Inline code
+      let s = str.replace(/`([^`]+)`/g, '<code style="background: #18181b; border: 1px solid #27272a; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.88em; color: #f4f4f5;">$1</code>');
+      // Bold
+      s = s.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #ffffff; font-weight: 700;">$1</strong>');
+      s = s.replace(/__(.*?)__/g, '<strong style="color: #ffffff; font-weight: 700;">$1</strong>');
+      // Italic
+      s = s.replace(/(^|[^\*])\*([^\*]+)\*([^\*]|$)/g, '$1<em style="color: #d4d4d8;">$2</em>$3');
+      s = s.replace(/(^|[^_])_([^_]+)_([^_]|$)/g, '$1<em style="color: #d4d4d8;">$2</em>$3');
+      return s;
+    }
+
+    // ROBUST LINE-BY-LINE MARKDOWN PARSER (Handles all # to ###### levels, lists, quotes)
     function formatMarkdown(text) {
       if (!text) return "";
-      let html = text
+
+      // Sanitize raw HTML tags
+      let src = text
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
 
-      // Markdown Headings
-      html = html.replace(/^### (.*$)/gim, '<h4 style="color: #ffffff; font-size: 0.9rem; font-weight: 700; margin: 16px 0 6px; border-bottom: 1px solid #27272a; padding-bottom: 4px;">$1</h4>');
-      html = html.replace(/^## (.*$)/gim, '<h3 style="color: #ffffff; font-size: 0.98rem; font-weight: 700; margin: 18px 0 8px; border-bottom: 1px solid #3f3f46; padding-bottom: 4px;">$1</h3>');
-      html = html.replace(/^# (.*$)/gim, '<h2 style="color: #ffffff; font-size: 1.08rem; font-weight: 800; margin: 20px 0 10px;">$1</h2>');
+      const lines = src.split(/\r?\n/);
+      let output = [];
 
-      // Bold text
-      html = html.replace(/\*\*(.*?)\*\*/g, '<strong style="color: #ffffff; font-weight: 700;">$1</strong>');
-      html = html.replace(/__(.*?)__/g, '<strong style="color: #ffffff; font-weight: 700;">$1</strong>');
+      for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        let trimmed = line.trim();
 
-      // Ordered lists (e.g. 1. or 1) )
-      html = html.replace(/^\s*(\d+)[\.\)]\s+(.*$)/gim, '<div style="margin: 6px 0 6px 12px; display: flex; align-items: flex-start; gap: 8px;"><span style="color: #ffffff; font-weight: 700; min-width: 18px;">$1.</span><span style="color: #e4e4e7;">$2</span></div>');
+        // Empty lines create paragraph separation
+        if (trimmed === "") {
+          output.push('<div style="height: 10px;"></div>');
+          continue;
+        }
 
-      // Unordered lists (e.g. - or * )
-      html = html.replace(/^\s*[\-\*]\s+(.*$)/gim, '<div style="margin: 6px 0 6px 14px; display: flex; align-items: flex-start; gap: 8px;"><span style="color: #a1a1aa;">•</span><span style="color: #e4e4e7;">$1</span></div>');
+        // Horizontal Rule
+        if (/^(\-{3,}|\*{3,}|_{3,})$/.test(trimmed)) {
+          output.push('<hr style="border: none; border-top: 1px solid #27272a; margin: 16px 0;">');
+          continue;
+        }
 
-      // Paragraph spacing
-      html = html.replace(/\n\n+/g, '<div style="height: 10px;"></div>');
-      html = html.replace(/\n/g, '<br>');
+        // Headings (#, ##, ###, ####, #####, ######)
+        let hMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
+        if (hMatch) {
+          const level = hMatch[1].length;
+          const hText = parseInlineMarkdown(hMatch[2]);
+          if (level <= 2) {
+            output.push(`<div style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin: 18px 0 8px; padding-bottom: 5px; border-bottom: 1px solid #3f3f46; letter-spacing: -0.2px;">${hText}</div>`);
+          } else if (level === 3) {
+            output.push(`<div style="color: #ffffff; font-size: 0.95rem; font-weight: 700; margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #27272a;">${hText}</div>`);
+          } else {
+            // Level 4, 5, 6 (e.g. #### Executive Supervisory Finding)
+            output.push(`<div style="color: #ffffff; font-size: 0.88rem; font-weight: 700; margin: 16px 0 6px; padding-bottom: 4px; border-bottom: 1px solid #1f1f23; letter-spacing: 0.3px; text-transform: uppercase;">${hText}</div>`);
+          }
+          continue;
+        }
 
-      return html;
+        // Blockquote
+        let bqMatch = trimmed.match(/^&gt;\s+(.*)$/);
+        if (bqMatch) {
+          output.push(`<blockquote style="border-left: 3px solid #71717a; margin: 10px 0; padding: 6px 14px; background: rgba(255,255,255,0.03); color: #d4d4d8; font-style: italic;">${parseInlineMarkdown(bqMatch[1])}</blockquote>`);
+          continue;
+        }
+
+        // Ordered List Item (e.g. "1." or "1)")
+        let numMatch = trimmed.match(/^(\d+)[\.\)]\s+(.*)$/);
+        if (numMatch) {
+          output.push(`<div style="display: flex; gap: 8px; margin: 6px 0 6px 6px; align-items: flex-start;"><span style="color: #ffffff; font-weight: 700; min-width: 18px;">${numMatch[1]}.</span><div style="flex: 1; color: #d4d4d8; line-height: 1.6;">${parseInlineMarkdown(numMatch[2])}</div></div>`);
+          continue;
+        }
+
+        // Bulleted List Item (e.g. "-" or "*")
+        let bulletMatch = trimmed.match(/^[\-\*]\s+(.*)$/);
+        if (bulletMatch) {
+          output.push(`<div style="display: flex; gap: 8px; margin: 6px 0 6px 10px; align-items: flex-start;"><span style="color: #a1a1aa; font-size: 1rem; line-height: 1.3;">•</span><div style="flex: 1; color: #d4d4d8; line-height: 1.6;">${parseInlineMarkdown(bulletMatch[1])}</div></div>`);
+          continue;
+        }
+
+        // Standard Paragraph
+        output.push(`<div style="color: #d4d4d8; line-height: 1.68; margin-bottom: 6px;">${parseInlineMarkdown(trimmed)}</div>`);
+      }
+
+      return output.join("\n");
     }
 
     // RENDER AI PROMPT (Domain-Specific to Ingested CSE Entity)
