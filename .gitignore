@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Operating System files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+
+# Editor & IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Exclude raw data directories and datasets
+data/
+*.csv
+*.json
+
+# Scratch scripts and auxiliary planning files
+generate_rich_datasets.py
+IMPLEMENTATION_PLAN.md
+PRESENTATION_SLIDES.md
+problem statement.md
